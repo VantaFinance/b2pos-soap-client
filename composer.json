@@ -1,0 +1,35 @@
+{
+    "name": "vanta/b2pos-soap-client",
+    "description": "Soap client for b2pos",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Kaufman",
+            "email": "d.kaufman@pos-credit.ru"
+        },
+        {
+            "name": "Vanta Team",
+            "email": "info@vanta.ru"
+        }
+    ],
+    "keywords": [
+        "vanta",
+        "vanta client",
+        "vanta soap",
+        "vanta soap client"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vanta\\Integration\\B2posSoapClient\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "ext-libxml": "*",
+        "ext-soap": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.17",
+        "phpstan/phpstan": "^1.10"
+    }
+}
