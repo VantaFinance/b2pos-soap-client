@@ -23,7 +23,6 @@
             "Vanta\\Integration\\B2posSoapClient\\": "src/"
         }
     },
-    "minimum-stability": "stable",
     "require": {
         "php": "^8.1",
         "ext-libxml": "*",
