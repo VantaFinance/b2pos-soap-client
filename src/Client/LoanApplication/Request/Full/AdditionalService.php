@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full;
+
+enum AdditionalService: int
+{
+    case SMS_NOTIFICATION = 1;
+
+    case INSURANCE_ACCIDENTS_AND_LIFE = 2;
+
+    case INSURANCE_JOB_LOSS = 3;
+
+    case LOAN_PROTECTION_CAPITAL_LIFE = 21;
+
+    case LOAN_PROTECTION_PLUS_CAPITAL_LIFE = 22;
+
+    case PROTECTION_BASE_CAPITAL_LIFE = 23;
+
+    case PROTECTION_LIGHT_CAPITAL_LIFE = 24;
+
+    case INSURANCE_ACCIDENT_AND_ILLNESS_D2 = 31;
+
+    case INSURANCE_DIGITAL_AND_HOUSEHOLD_APPLIANCES_D2 = 32;
+
+    case INSURANCE_LIFE_RENAISSANCE = 41;
+
+    case INSURANCE_JOB_LOSS_RENAISSANCE = 42;
+
+    case RETAIL_FIX_1_RENAISSANCE = 43;
+
+    case RETAIL_FIX_2_RENAISSANCE = 44;
+
+    case RETAIL_FIX_MAP_PROMO_RENAISSANCE = 45;
+
+    case INSURANCE_LIFE_VSK = 51;
+
+    case INSURANCE_LIFE_AND_JOB_LOSS_VSK = 52;
+
+    case HOUSEHOLD_APPLIANCES_VSK = 53;
+
+    case SERVICE_LIFE_PLUS_VSK = 54;
+
+    case SUPER_POWERS_VSK = 55;
+}

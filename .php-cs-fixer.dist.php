@@ -22,9 +22,9 @@ return (new PhpCsFixer\Config())
         'concat_space'                  => ['spacing' => 'one'],
         'ordered_imports'               => true,
         'global_namespace_import'       => [
-            'import_classes'   => false,
-            'import_constants' => false,
-            'import_functions' => false,
+            'import_classes'   => true,
+            'import_constants' => true,
+            'import_functions' => true,
         ],
         'native_constant_invocation'    => false,
         'native_function_invocation'    => false,
@@ -40,6 +40,8 @@ return (new PhpCsFixer\Config())
         'binary_operator_spaces'        => ['operators' => ['=>' => 'align_single_space_minimal', '=' => 'align_single_space_minimal']],
         '@PHP74Migration'               => true,
         '@PHP74Migration:risky'         => true,
+        'phpdoc_separation'             => false,
+        'nullable_type_declaration_for_default_null_value' => true,
     ])
     ->setFinder($finder)
 ;
