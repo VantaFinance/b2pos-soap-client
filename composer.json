@@ -9,20 +9,21 @@
         },
         {
             "name": "Vanta Team",
-            "email": "info@vanta.ru"
+            "homepage": "https://vanta.ru"
         }
     ],
     "keywords": [
-        "vanta",
-        "vanta client",
-        "vanta soap",
-        "vanta soap client"
+        "b2pos client",
+        "b2pos soap client",
+        "poscredit client",
+        "poscredit"
     ],
     "autoload": {
         "psr-4": {
             "Vanta\\Integration\\B2posSoapClient\\": "src/"
         }
     },
+    "minimum-stability": "stable",
     "require": {
         "php": "^8.1",
         "ext-libxml": "*",
