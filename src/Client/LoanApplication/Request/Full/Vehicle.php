@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\CountryIso;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\PurchaseType;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\CountryIso;
 
 final class Vehicle
 {

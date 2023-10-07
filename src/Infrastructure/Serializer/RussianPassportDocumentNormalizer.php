@@ -6,7 +6,7 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\Serializer;
 
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface as Normalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportDocument;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportDocument;
 
 final class RussianPassportDocumentNormalizer implements Normalizer
 {

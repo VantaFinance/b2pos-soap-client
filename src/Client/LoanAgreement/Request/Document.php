@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanAgreement\Request;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\Base64;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Base64;
 
 final class Document
 {

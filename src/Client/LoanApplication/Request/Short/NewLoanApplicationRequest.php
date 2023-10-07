@@ -8,9 +8,10 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberType;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\MoneyPositiveOrZero;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportDocument;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Short\LoanType;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\PhoneNumberNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportDocument;
 
 final class NewLoanApplicationRequest
 {
@@ -67,7 +68,7 @@ final class NewLoanApplicationRequest
      * @var numeric-string
      */
     #[SerializedPath('[env:Body][ns1:SendShortOptyRequest][ns1:tradeID]')]
-    public readonly string $tradeId;
+    public readonly string $pointOfSaleId;
 
     #[SerializedPath('[env:Body][ns1:SendShortOptyRequest][ns1:creditCondition]')]
     public readonly LoanType $loanType;
@@ -85,7 +86,7 @@ final class NewLoanApplicationRequest
      * @param non-empty-string               $secondname
      * @param positive-int                   $loanPeriodInMonths
      * @param non-empty-string               $requestId
-     * @param numeric-string                 $tradeId
+     * @param numeric-string                 $pointOfSaleId
      * @param non-empty-array<BasketProduct> $basketProducts
      */
     public function __construct(
@@ -99,7 +100,7 @@ final class NewLoanApplicationRequest
         RussianPassportDocument $russianPassportDocument,
         int $loanPeriodInMonths,
         string $requestId,
-        string $tradeId,
+        string $pointOfSaleId,
         LoanType $loanType,
         array $basketProducts,
     ) {
@@ -113,7 +114,7 @@ final class NewLoanApplicationRequest
         $this->russianPassportDocument = $russianPassportDocument;
         $this->loanPeriodInMonths      = $loanPeriodInMonths;
         $this->requestId               = $requestId;
-        $this->tradeId                 = $tradeId;
+        $this->pointOfSaleId           = $pointOfSaleId;
         $this->loanType                = $loanType;
         $this->basketProducts          = $basketProducts;
     }

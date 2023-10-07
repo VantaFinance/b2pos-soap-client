@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\Occupation;
 
 final class Spouce
 {

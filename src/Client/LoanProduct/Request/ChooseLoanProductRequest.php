@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
+use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Struct\SignType;
 
 final class ChooseLoanProductRequest
 {
