@@ -8,7 +8,6 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\BankDecision;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\SimpleElectronicSignatureAvailableStatus;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Struct\SignType;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class ResultFromBank
 {
@@ -63,44 +62,8 @@ final class ResultFromBank
     #[SerializedPath('[ns1:increasedLimit]')]
     public readonly ?bool $isIncreasedLimitApproved;
 
-    /**
-     * @var numeric-string|null
-     */
-    #[SerializedPath('[ns1:offer][ns1:variantID]')]
-    public readonly ?string $loanProductId;
-
-    /**
-     * @var non-empty-string|null
-     */
-    #[SerializedPath('[ns1:offer][ns1:product]')]
-    public readonly ?string $loanProductName;
-
-    #[SerializedPath('[ns1:offer][ns1:amount]')]
-    public readonly ?MoneyPositiveOrZero $paymentAmount;
-
-    /**
-     * @var positive-int|null
-     */
-    #[SerializedPath('[ns1:offer][ns1:terms]')]
-    public readonly ?int $periodToInMonths;
-
-    #[SerializedPath('[ns1:offer][ns1:firstPayment]')]
-    public readonly ?MoneyPositiveOrZero $initialPaymentAmount;
-
-    #[SerializedPath('[ns1:offer][ns1:monthlyAmount]')]
-    public readonly ?MoneyPositiveOrZero $paymentAmountInMonth;
-
-    #[SerializedPath('[ns1:offer][ns1:insuranceAmount]')]
-    public readonly ?MoneyPositiveOrZero $insuranceAmount;
-
-    #[SerializedPath('[ns1:offer][ns1:otherAmount]')]
-    public readonly ?MoneyPositiveOrZero $otherProductsAmount;
-
-    #[SerializedPath('[ns1:offer][ns1:rate]')]
-    public readonly ?float $loanRate;
-
-    #[SerializedPath('[ns1:offer][ns1:rebate]')]
-    public readonly ?float $discount;
+    #[SerializedPath('[ns1:offer]')]
+    public readonly ?Offer $offer;
 
     /**
      * @var non-empty-string|null
@@ -132,9 +95,6 @@ final class ResultFromBank
      * @param numeric-string|null   $chosenBankProductId
      * @param non-empty-string|null $loanAgreementNumber
      * @param non-empty-string|null $authorizationCode
-     * @param numeric-string|null   $loanProductId
-     * @param non-empty-string|null $loanProductName
-     * @param positive-int|null     $periodToInMonths
      * @param array<int, Insurance> $insurances
      * @param non-empty-string|null $branchCode
      * @param non-empty-string|null $authorizationUserCode
@@ -153,16 +113,7 @@ final class ResultFromBank
         ?bool $isLoanApplicationCanceled,
         ?bool $isLoanAgreementAuthorizationCancel,
         ?bool $isIncreasedLimitApproved,
-        ?string $loanProductId,
-        ?string $loanProductName,
-        ?MoneyPositiveOrZero $paymentAmount,
-        ?int $periodToInMonths,
-        ?MoneyPositiveOrZero $initialPaymentAmount,
-        ?MoneyPositiveOrZero $paymentAmountInMonth,
-        ?MoneyPositiveOrZero $insuranceAmount,
-        ?MoneyPositiveOrZero $otherProductsAmount,
-        ?float $loanRate,
-        ?float $discount,
+        ?Offer $offer,
         ?string $branchCode,
         ?string $authorizationUserCode,
         ?SimpleElectronicSignatureAvailableStatus $sesAvailable,
@@ -182,16 +133,7 @@ final class ResultFromBank
         $this->isLoanApplicationCanceled             = $isLoanApplicationCanceled;
         $this->isLoanAgreementAuthorizationCancel    = $isLoanAgreementAuthorizationCancel;
         $this->isIncreasedLimitApproved              = $isIncreasedLimitApproved;
-        $this->loanProductId                         = $loanProductId;
-        $this->loanProductName                       = $loanProductName;
-        $this->paymentAmount                         = $paymentAmount;
-        $this->periodToInMonths                      = $periodToInMonths;
-        $this->initialPaymentAmount                  = $initialPaymentAmount;
-        $this->paymentAmountInMonth                  = $paymentAmountInMonth;
-        $this->insuranceAmount                       = $insuranceAmount;
-        $this->otherProductsAmount                   = $otherProductsAmount;
-        $this->loanRate                              = $loanRate;
-        $this->discount                              = $discount;
+        $this->offer                                 = $offer;
         $this->branchCode                            = $branchCode;
         $this->authorizationUserCode                 = $authorizationUserCode;
         $this->sesAvailable                          = $sesAvailable;
