@@ -10,60 +10,59 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 final class Offer
 {
     /**
-     * @var numeric-string|null
+     * @var numeric-string
      */
     #[SerializedPath('[ns1:variantID]')]
-    public readonly ?string $loanProductId;
+    public readonly string $loanProductId;
 
     /**
-     * @var non-empty-string|null
+     * @var non-empty-string
      */
     #[SerializedPath('[ns1:product]')]
-    public readonly ?string $loanProductName;
+    public readonly string $loanProductName;
 
     #[SerializedPath('[ns1:amount]')]
-    public readonly ?MoneyPositiveOrZero $paymentAmount;
+    public readonly MoneyPositiveOrZero $paymentAmount;
 
     /**
-     * @var positive-int|null
+     * @var positive-int
      */
     #[SerializedPath('[ns1:terms]')]
-    public readonly ?int $periodToInMonths;
+    public readonly int $periodToInMonths;
 
     #[SerializedPath('[ns1:firstPayment]')]
-    public readonly ?MoneyPositiveOrZero $initialPaymentAmount;
+    public readonly MoneyPositiveOrZero $initialPaymentAmount;
 
     #[SerializedPath('[ns1:monthlyAmount]')]
-    public readonly ?MoneyPositiveOrZero $paymentAmountInMonth;
+    public readonly MoneyPositiveOrZero $paymentAmountInMonth;
 
     #[SerializedPath('[ns1:insuranceAmount]')]
-    public readonly ?MoneyPositiveOrZero $insuranceAmount;
+    public readonly MoneyPositiveOrZero $insuranceAmount;
 
     #[SerializedPath('[ns1:otherAmount]')]
-    public readonly ?MoneyPositiveOrZero $otherProductsAmount;
+    public readonly MoneyPositiveOrZero $otherProductsAmount;
 
     #[SerializedPath('[ns1:rate]')]
-    public readonly ?float $loanRate;
+    public readonly float $loanRate;
 
     #[SerializedPath('[ns1:rebate]')]
-    public readonly ?float $discount;
+    public readonly float $discount;
 
     /**
-     * @param numeric-string|null   $loanProductId
-     * @param non-empty-string|null $loanProductName
-     * @param positive-int|null     $periodToInMonths
-     */
+     * @param numeric-string   $loanProductId
+     * @param non-empty-string $loanProductName
+     * @param positive-int     $periodToInMonths     */
     public function __construct(
-        ?string $loanProductId,
-        ?string $loanProductName,
-        ?MoneyPositiveOrZero $paymentAmount,
-        ?int $periodToInMonths,
-        ?MoneyPositiveOrZero $initialPaymentAmount,
-        ?MoneyPositiveOrZero $paymentAmountInMonth,
-        ?MoneyPositiveOrZero $insuranceAmount,
-        ?MoneyPositiveOrZero $otherProductsAmount,
-        ?float $loanRate,
-        ?float $discount,
+        string $loanProductId,
+        string $loanProductName,
+        MoneyPositiveOrZero $paymentAmount,
+        int $periodToInMonths,
+        MoneyPositiveOrZero $initialPaymentAmount,
+        MoneyPositiveOrZero $paymentAmountInMonth,
+        MoneyPositiveOrZero $insuranceAmount,
+        MoneyPositiveOrZero $otherProductsAmount,
+        float $loanRate,
+        float $discount,
     ) {
         $this->loanProductId        = $loanProductId;
         $this->loanProductName      = $loanProductName;
