@@ -11,7 +11,7 @@ final class FactualAddress extends Address
     /**
      * @var positive-int
      */
-    #[SerializedPath('[ns1:period]')]
+    #[SerializedPath('[api:period]')]
     public readonly int $periodOfStateInMonths;
 
     /**
