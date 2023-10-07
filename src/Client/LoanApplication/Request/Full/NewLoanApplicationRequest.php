@@ -296,7 +296,7 @@ final class NewLoanApplicationRequest
      * @var numeric-string|null
      */
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:tradeID]')]
-    public readonly ?string $pontOfSaleId;
+    public readonly ?string $pointOfSaleId;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:deliveryType]')]
     public readonly ?DeliveryType $deliveryType;
@@ -323,7 +323,7 @@ final class NewLoanApplicationRequest
      * @param non-empty-string|null               $workName
      * @param non-empty-string|null               $documentDetails
      * @param non-empty-string|null               $orderIdInShop
-     * @param numeric-string|null                 $pontOfSaleId
+     * @param numeric-string|null                 $pointOfSaleId
      * @param numeric-string|null                 $previousLoanApplicationId
      */
     public function __construct(
@@ -382,7 +382,7 @@ final class NewLoanApplicationRequest
         ?Base64 $passportMainPage = null,
         ?Base64 $passportRegister = null,
         ?string $orderIdInShop = null,
-        ?string $pontOfSaleId = null,
+        ?string $pointOfSaleId = null,
         ?DeliveryType $deliveryType = null,
         ?string $previousLoanApplicationId = null,
     ) {
@@ -453,7 +453,7 @@ final class NewLoanApplicationRequest
         $this->passportMainPage            = $passportMainPage;
         $this->passportRegister            = $passportRegister;
         $this->orderIdInShop               = $orderIdInShop;
-        $this->pontOfSaleId                = $pontOfSaleId;
+        $this->pointOfSaleId               = $pointOfSaleId;
         $this->deliveryType                = $deliveryType;
         $this->previousLoanApplicationId   = $previousLoanApplicationId;
     }

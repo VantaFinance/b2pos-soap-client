@@ -26,22 +26,22 @@ final class GetAvailableLoanProductsRequest
      * @var numeric-string|null
      */
     #[SerializedPath('[env:Body][ns1:CalculatorBookOptyRequest][ns1:tradeID]')]
-    public ?string $tradeId;
+    public ?string $pointOfSaleId;
 
     /**
-     * @param numeric-string|null $tradeId
+     * @param numeric-string|null $pointOfSaleId
      */
     public function __construct(
         MoneyPositiveOrZero $paymentAmount,
         MoneyPositiveOrZero $firstPaymentAmount,
         int $loanPeriodInMonths,
         LoanType $loanType,
-        ?string $tradeId,
+        ?string $pointOfSaleId,
     ) {
         $this->paymentAmount      = $paymentAmount;
         $this->firstPaymentAmount = $firstPaymentAmount;
         $this->loanPeriodInMonths = $loanPeriodInMonths;
         $this->loanType           = $loanType;
-        $this->tradeId            = $tradeId;
+        $this->pointOfSaleId      = $pointOfSaleId;
     }
 }
