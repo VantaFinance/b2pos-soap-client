@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\B2posSoapClient;
 
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\NewLoanApplicationRequest as NewLoanApplicationRequestFull;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\GetLoanApplicationStatusRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Short\NewLoanApplicationRequest as NewLoanApplicationRequestShort;
@@ -13,16 +12,14 @@ use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\GetLoanApp
 interface LoanApplicationClient
 {
     /**
-     * @throws B2PosSoapClientException
-     *
      * @return numeric-string
+     * @throws B2PosSoapClientException
      */
     public function newLoanApplicationShort(NewLoanApplicationRequestShort $request): string;
 
     /**
-     * @throws B2PosSoapClientException
-     *
      * @return numeric-string
+     * @throws B2PosSoapClientException
      */
     public function newLoanApplicationFull(NewLoanApplicationRequestFull $request): string;
 

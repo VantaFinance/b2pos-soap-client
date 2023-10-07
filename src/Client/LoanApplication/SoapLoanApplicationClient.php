@@ -48,7 +48,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr    = $this->client->sendRequest($requestPsr);
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->getContents();
 
         /* @phpstan-ignore-next-line */

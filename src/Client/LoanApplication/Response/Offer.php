@@ -51,7 +51,8 @@ final class Offer
     /**
      * @param numeric-string   $loanProductId
      * @param non-empty-string $loanProductName
-     * @param positive-int     $periodToInMonths     */
+     * @param positive-int     $periodToInMonths
+     */
     public function __construct(
         string $loanProductId,
         string $loanProductName,
