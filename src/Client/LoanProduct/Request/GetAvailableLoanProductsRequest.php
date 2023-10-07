@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\MoneyPositiveOrZero;
+use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Struct\LoanType;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class GetAvailableLoanProductsRequest
 {

@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface as Normalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportSeries;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportSeries;
 use Webmozart\Assert\Assert;
 
 final class RussianPassportSeriesNormalizer implements Normalizer, Denormalizer

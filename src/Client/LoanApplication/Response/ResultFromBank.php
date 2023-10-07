@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request\SignType;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\MoneyPositiveOrZero;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\BankDecision;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\SimpleElectronicSignatureAvailableStatus;
+use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Struct\SignType;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class ResultFromBank
 {

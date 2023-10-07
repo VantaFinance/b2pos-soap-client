@@ -8,9 +8,10 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberType;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\MoneyPositiveOrZero;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportDocument;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Short\LoanType;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\PhoneNumberNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportDocument;
 
 final class NewLoanApplicationRequest
 {

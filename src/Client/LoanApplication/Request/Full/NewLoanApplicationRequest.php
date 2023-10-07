@@ -10,13 +10,32 @@ use DateTimeImmutable;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\Base64;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\DivisionCode;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\Email;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\MoneyPositiveOrZero;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportNumber;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Request\RussianPassportSeries;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\AdditionalService;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\ChildrenCount;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\CommercialEnterpriceStatus;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\DeliveryType;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\DocumentType;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\Education;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\ExperienceInEnterprise;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\ExperienceInWorkField;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\FamilyStatus;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\ForeignCapitalEnterpriceStatus;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\Gender;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\IncomeType;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\Industry;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\LoanType;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\OrganizationalLegalForm;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\RealPropertyType;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\StateOwnedEnterpriceStatus;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\WorkField;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\Full\WorkPosition;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\PhoneNumberNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Base64;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\DivisionCode;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Email;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportNumber;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\RussianPassportSeries;
 
 final class NewLoanApplicationRequest
 {
