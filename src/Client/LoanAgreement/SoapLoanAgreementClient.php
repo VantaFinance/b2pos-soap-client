@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanAgreement;
 
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as PsrHttpClient;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\Request\AuthorizeLoanAgreementRequest;
@@ -23,6 +24,9 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
     ) {
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function authorizeLoanAgreement(AuthorizeLoanAgreementRequest $request): AuthorizeLoanAgreementResponse
     {
         $requestContent = $this->serializer->serialize(
@@ -41,8 +45,7 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest($requestPsr);
-
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->getContents();
 
         return $this->serializer->deserialize(
