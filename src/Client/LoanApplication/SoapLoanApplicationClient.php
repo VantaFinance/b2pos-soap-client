@@ -51,6 +51,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         $responsePsr    = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->getContents();
 
+        /* @phpstan-ignore-next-line */
         return $this->serializer->deserialize(
             $responseContent,
             'numeric-string',
@@ -98,6 +99,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         );
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function getLoanApplicationStatus(GetLoanApplicationStatusRequest $request): GetLoanApplicationStatusResponse
     {
         $requestContent = $this->serializer->serialize(
@@ -116,8 +120,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest($requestPsr);
-
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->getContents();
 
         return $this->serializer->deserialize(

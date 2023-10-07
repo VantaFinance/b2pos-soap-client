@@ -2,3 +2,11 @@ parameters:
     level: 9
     paths:
         - src
+    exceptions:
+        implicitThrows: true
+        check:
+            tooWideThrowType: true
+
+    parallel:
+            maximumNumberOfProcesses: 4
+
