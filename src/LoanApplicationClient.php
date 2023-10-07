@@ -12,19 +12,23 @@ use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\GetLoanApp
 interface LoanApplicationClient
 {
     /**
-     * @return numeric-string
      * @throws B2PosSoapClientException
+     *
+     * @return numeric-string
      */
     public function newLoanApplicationShort(NewLoanApplicationRequestShort $request): string;
 
     /**
-     * @return numeric-string
      * @throws B2PosSoapClientException
+     *
+     * @return numeric-string
      */
     public function newLoanApplicationFull(NewLoanApplicationRequestFull $request): string;
 
     /**
+     * @param numeric-string $profileId
+     *
      * @throws B2PosSoapClientException
      */
-    public function getLoanApplicationStatus(GetLoanApplicationStatusRequest $request): GetLoanApplicationStatusResponse;
+    public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse;
 }

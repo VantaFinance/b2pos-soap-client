@@ -30,7 +30,7 @@ final class Base64
     public static function createFromBase64(string $base64String): self
     {
         if (false === base64_decode($base64String, true)) {
-            throw new InvalidArgumentException('Invalid base64String');
+            throw new InvalidArgumentException('Invalid base64');
         }
 
         return new self($base64String);
