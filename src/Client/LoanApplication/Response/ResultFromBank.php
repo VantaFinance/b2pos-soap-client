@@ -29,6 +29,9 @@ final class ResultFromBank
     #[SerializedPath('[ns1:decision]')]
     public readonly ?BankDecision $decision;
 
+    /**
+     * @var non-empty-string|null
+     */
     #[SerializedPath('[ns1:error_text]')]
     public readonly ?string $errorText;
 
