@@ -50,6 +50,7 @@ final class ResponseContentReportsErrorDenormalizer implements Denormalizer
             throw new UnexpectedValueException('CHECK_ERROR_PATH in context required');
         }
 
+        // ошибка может быть только одна, не массив
         $errorCode        = $this->getErrorCode($data, $context[self::CHECK_ERROR_PATH]);
         $errorDescription = $this->getErrorDescription($data, $context[self::CHECK_ERROR_PATH]);
 
