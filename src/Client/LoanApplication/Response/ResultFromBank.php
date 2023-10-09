@@ -23,7 +23,7 @@ final class ResultFromBank
     public readonly SignType $signType;
 
     #[SerializedPath('[ns1:signedTypeStatus]')]
-    public readonly bool $isSimpleElectronicSignatureSigned;
+    public readonly bool $isSesSigned; // Simple Electronic Signature
 
     #[SerializedPath('[ns1:decision]')]
     public readonly ?BankDecision $decision;
@@ -80,10 +80,10 @@ final class ResultFromBank
     public readonly ?string $authorizationUserCode;
 
     #[SerializedPath('[ns1:isActiveSES]')]
-    public readonly ?SignType $sesAvailable;
+    public readonly ?bool $sesAvailable; // Simple Electronic Signature
 
     #[SerializedPath('[ns1:isOldClientSES]')]
-    public readonly ?bool $isOldClientSimpleElectronicSignature;
+    public readonly ?bool $isOldClientSes;
 
     /**
      * @var array<int, Insurance>
@@ -105,7 +105,7 @@ final class ResultFromBank
         string $bankId,
         SignType $signTypeAvailableForLoanApplicationAndBank,
         SignType $signType,
-        bool $isSimpleElectronicSignatureSigned,
+        bool $isSesSigned,
         ?BankDecision $decision,
         ?string $errorText,
         ?string $chosenBankProductId,
@@ -118,14 +118,14 @@ final class ResultFromBank
         ?Offer $offer,
         ?string $branchCode,
         ?string $authorizationUserCode,
-        ?SignType $sesAvailable,
-        ?bool $isOldClientSimpleElectronicSignature,
+        ?bool $sesAvailable,
+        ?bool $isOldClientSes,
         array $insurances = [],
     ) {
         $this->bankId                                     = $bankId;
         $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
         $this->signType                                   = $signType;
-        $this->isSimpleElectronicSignatureSigned          = $isSimpleElectronicSignatureSigned;
+        $this->isSesSigned                                = $isSesSigned;
         $this->decision                                   = $decision;
         $this->errorText                                  = $errorText;
         $this->chosenBankProductId                        = $chosenBankProductId;
@@ -139,7 +139,7 @@ final class ResultFromBank
         $this->branchCode                                 = $branchCode;
         $this->authorizationUserCode                      = $authorizationUserCode;
         $this->sesAvailable                               = $sesAvailable;
-        $this->isOldClientSimpleElectronicSignature       = $isOldClientSimpleElectronicSignature;
+        $this->isOldClientSes                             = $isOldClientSes;
         $this->insurances                                 = $insurances;
     }
 }
