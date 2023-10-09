@@ -6,8 +6,7 @@ namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\BankDecision;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Struct\SimpleElectronicSignatureAvailableStatus;
-use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Struct\SignType;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\SignType;
 
 final class ResultFromBank
 {
@@ -18,10 +17,10 @@ final class ResultFromBank
     public readonly string $bankId;
 
     #[SerializedPath('[ns1:signType]')]
-    public readonly SimpleElectronicSignatureAvailableStatus $sesAvailableForLoanApplicationAndBank;
+    public readonly SignType $signTypeAvailableForLoanApplicationAndBank;
 
     #[SerializedPath('[ns1:signedType]')]
-    public readonly SignType $signTye;
+    public readonly SignType $signType;
 
     #[SerializedPath('[ns1:signedTypeStatus]')]
     public readonly bool $isSimpleElectronicSignatureSigned;
@@ -81,7 +80,7 @@ final class ResultFromBank
     public readonly ?string $authorizationUserCode;
 
     #[SerializedPath('[ns1:isActiveSES]')]
-    public readonly ?SimpleElectronicSignatureAvailableStatus $sesAvailable;
+    public readonly ?SignType $sesAvailable;
 
     #[SerializedPath('[ns1:isOldClientSES]')]
     public readonly ?bool $isOldClientSimpleElectronicSignature;
@@ -104,8 +103,8 @@ final class ResultFromBank
      */
     public function __construct(
         string $bankId,
-        SimpleElectronicSignatureAvailableStatus $sesAvailableForLoanApplicationAndBank,
-        SignType $signTye,
+        SignType $signTypeAvailableForLoanApplicationAndBank,
+        SignType $signType,
         bool $isSimpleElectronicSignatureSigned,
         ?BankDecision $decision,
         ?string $errorText,
@@ -119,28 +118,28 @@ final class ResultFromBank
         ?Offer $offer,
         ?string $branchCode,
         ?string $authorizationUserCode,
-        ?SimpleElectronicSignatureAvailableStatus $sesAvailable,
+        ?SignType $sesAvailable,
         ?bool $isOldClientSimpleElectronicSignature,
         array $insurances = [],
     ) {
-        $this->bankId                                = $bankId;
-        $this->sesAvailableForLoanApplicationAndBank = $sesAvailableForLoanApplicationAndBank;
-        $this->signTye                               = $signTye;
-        $this->isSimpleElectronicSignatureSigned     = $isSimpleElectronicSignatureSigned;
-        $this->decision                              = $decision;
-        $this->errorText                             = $errorText;
-        $this->chosenBankProductId                   = $chosenBankProductId;
-        $this->isLoanAgreementAuthorized             = $isLoanAgreementAuthorized;
-        $this->loanAgreementNumber                   = $loanAgreementNumber;
-        $this->authorizationCode                     = $authorizationCode;
-        $this->isLoanApplicationCanceled             = $isLoanApplicationCanceled;
-        $this->isLoanAgreementAuthorizationCancel    = $isLoanAgreementAuthorizationCancel;
-        $this->isIncreasedLimitApproved              = $isIncreasedLimitApproved;
-        $this->offer                                 = $offer;
-        $this->branchCode                            = $branchCode;
-        $this->authorizationUserCode                 = $authorizationUserCode;
-        $this->sesAvailable                          = $sesAvailable;
-        $this->isOldClientSimpleElectronicSignature  = $isOldClientSimpleElectronicSignature;
-        $this->insurances                            = $insurances;
+        $this->bankId                                     = $bankId;
+        $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
+        $this->signType                                   = $signType;
+        $this->isSimpleElectronicSignatureSigned          = $isSimpleElectronicSignatureSigned;
+        $this->decision                                   = $decision;
+        $this->errorText                                  = $errorText;
+        $this->chosenBankProductId                        = $chosenBankProductId;
+        $this->isLoanAgreementAuthorized                  = $isLoanAgreementAuthorized;
+        $this->loanAgreementNumber                        = $loanAgreementNumber;
+        $this->authorizationCode                          = $authorizationCode;
+        $this->isLoanApplicationCanceled                  = $isLoanApplicationCanceled;
+        $this->isLoanAgreementAuthorizationCancel         = $isLoanAgreementAuthorizationCancel;
+        $this->isIncreasedLimitApproved                   = $isIncreasedLimitApproved;
+        $this->offer                                      = $offer;
+        $this->branchCode                                 = $branchCode;
+        $this->authorizationUserCode                      = $authorizationUserCode;
+        $this->sesAvailable                               = $sesAvailable;
+        $this->isOldClientSimpleElectronicSignature       = $isOldClientSimpleElectronicSignature;
+        $this->insurances                                 = $insurances;
     }
 }
