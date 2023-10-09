@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication;
 
 use GuzzleHttp\Psr7\Request;
-use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as PsrHttpClient;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
@@ -27,9 +26,6 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
     ) {
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function newLoanApplicationShort(NewLoanApplicationRequestShort $request): string
     {
         $requestContent = $this->serializer->serialize(
@@ -63,9 +59,6 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         );
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function newLoanApplicationFull(NewLoanApplicationRequestFull $request): string
     {
         $requestContent = $this->serializer->serialize(
@@ -99,9 +92,6 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         );
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse
     {
         $requestContent = $this->serializer->serialize(
