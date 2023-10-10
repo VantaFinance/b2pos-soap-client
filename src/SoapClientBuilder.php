@@ -24,6 +24,7 @@ use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplication
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\AuthorizationMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ClientErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
@@ -52,6 +53,16 @@ final class SoapClientBuilder
     /**
      * @var non-empty-string
      */
+    private readonly string $userId;
+
+    /**
+     * @var non-empty-string
+     */
+    private readonly string $userToken;
+
+    /**
+     * @var non-empty-string
+     */
     private readonly string $url;
 
     /**
@@ -60,20 +71,27 @@ final class SoapClientBuilder
     private readonly array $middlewares;
 
     /**
+     * @param non-empty-string       $userId
+     * @param non-empty-string       $userToken
      * @param non-empty-string       $url
      * @param array<int, Middleware> $middlewares
      */
     private function __construct(
         XmlSerializer $serializer,
         PsrHttpClient $client,
+        string $userId,
+        string $userToken,
         string $url = 'https://api.b2pos.ru',
         array $middlewares = [],
     ) {
         $this->serializer  = $serializer;
         $this->client      = $client;
+        $this->userId      = $userId;
+        $this->userToken   = $userToken;
         $this->url         = $url;
         $this->middlewares = array_merge($middlewares, [
             new UrlMiddleware(),
+            new AuthorizationMiddleware($userId, $userToken),
             new ResponseContentErrorMiddleware(),
             new ClientErrorMiddleware(),
             new InternalServerMiddleware(),
@@ -118,8 +136,6 @@ final class SoapClientBuilder
                 new RequestNormalizer(
                     $objectNormalizer,
                     $propertyAccessor,
-                    $userId,
-                    $userToken,
                 ),
                 new ObjectDenormalizer(
                     $objectNormalizer,
@@ -134,7 +150,7 @@ final class SoapClientBuilder
 
         $serializer = new XmlSerializer($serializerSymfony);
 
-        return new self($serializer, $client);
+        return new self($serializer, $client, $userId, $userToken);
     }
 
     public function withSerializer(XmlSerializer $serializer): self
@@ -142,6 +158,8 @@ final class SoapClientBuilder
         return new self(
             $serializer,
             $this->client,
+            $this->userId,
+            $this->userToken,
             $this->url,
             $this->middlewares,
         );
@@ -152,6 +170,24 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $client,
+            $this->userId,
+            $this->userToken,
+            $this->url,
+            $this->middlewares,
+        );
+    }
+
+    /**
+     * @param non-empty-string $userId
+     * @param non-empty-string $userToken
+     */
+    public function withCredentials(string $userId, string $userToken): self
+    {
+        return new self(
+            $this->serializer,
+            $this->client,
+            $userId,
+            $userToken,
             $this->url,
             $this->middlewares,
         );
@@ -165,6 +201,8 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
+            $this->userId,
+            $this->userToken,
             $url,
             $this->middlewares,
         );
@@ -178,6 +216,8 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
+            $this->userId,
+            $this->userToken,
             $this->url,
             $middlewares,
         );
@@ -188,6 +228,8 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
+            $this->userId,
+            $this->userToken,
             $this->url,
             array_merge($this->middlewares, [$middleware]),
         );

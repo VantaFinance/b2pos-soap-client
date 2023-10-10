@@ -18,30 +18,12 @@ final class RequestNormalizer implements Normalizer
 
     private readonly PropertyAccessor $propertyAccessor;
 
-    /**
-     * @var numeric-string
-     */
-    private string $userId;
-
-    /**
-     * @var non-empty-string
-     */
-    private string $userToken;
-
-    /**
-     * @param numeric-string   $userId
-     * @param non-empty-string $userToken
-     */
     public function __construct(
         Normalizer $objectNormalizer,
         PropertyAccessor $propertyAccessor,
-        string $userId,
-        string $userToken,
     ) {
         $this->objectNormalizer = $objectNormalizer;
         $this->propertyAccessor = $propertyAccessor;
-        $this->userId           = $userId;
-        $this->userToken        = $userToken;
     }
 
     /**
@@ -75,8 +57,8 @@ final class RequestNormalizer implements Normalizer
         $userIdFieldPath    = sprintf('%s[%suserID]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlSerializer::FIELD_NAME_PREFIX]);
         $userTokenFieldPath = sprintf('%s[%suserToken]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlSerializer::FIELD_NAME_PREFIX]);
 
-        $this->propertyAccessor->setValue($requestNormalized, $userIdFieldPath, $this->userId);
-        $this->propertyAccessor->setValue($requestNormalized, $userTokenFieldPath, $this->userToken);
+        $this->propertyAccessor->setValue($requestNormalized, $userIdFieldPath, '#userId#');
+        $this->propertyAccessor->setValue($requestNormalized, $userTokenFieldPath, '#userToken#');
 
         return $requestNormalized;
     }
