@@ -53,7 +53,7 @@ final class ResponseContentErrorMiddleware implements Middleware
             return $response;
         }
 
-        throw ResponseContentErrorException::create($response, $request);
+        throw ResponseContentErrorException::create($response, $request, $errorCode, $errorDescription);
     }
 
     /**

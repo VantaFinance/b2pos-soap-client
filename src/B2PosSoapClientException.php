@@ -16,7 +16,7 @@ abstract class B2PosSoapClientException extends Exception implements ClientExcep
 
     public readonly Request $request;
 
-    final protected function __construct(
+    protected function __construct(
         Response $response,
         Request $request,
         string $message = '',
