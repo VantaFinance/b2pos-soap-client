@@ -8,7 +8,7 @@ enum SignType: int
 {
     case PAPER = 0;
 
-    case SIMPLE_ELECTRONIC_SIGNATURE = 1;
+    case SES = 1; // Simple Electronic Signature
 
-    case SIMPLE_ELECTRONIC_SIGNATURE_REPEATED = 2;
+    case SES_REPEATED = 2;
 }
