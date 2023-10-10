@@ -12,8 +12,6 @@ use Yiisoft\Http\Status;
 
 final class InternalServerMiddleware implements Middleware
 {
-    // @todo объединить middleWare-ы
-
     public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
     {
         $response   = $next($request, $clientConfiguration);

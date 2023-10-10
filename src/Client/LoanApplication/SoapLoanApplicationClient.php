@@ -38,7 +38,6 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             ],
         );
 
-        // @todo подумать о переносе в B2PosClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
