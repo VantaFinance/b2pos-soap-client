@@ -22,13 +22,13 @@ use Symfony\Component\Serializer\Serializer as SerializerSymfony;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\SoapLoanAgreementClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\ConfigurationClient;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\HttpClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ClientErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\PipelineMiddleware;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ResponseContentErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\UrlMiddleware;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\SoapB2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\Base64Normalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\CountryIsoNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\DivisionCodeNormalizer;
@@ -38,7 +38,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\NumericStringDen
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ObjectDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\PhoneNumberNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ResponseContentReportsErrorDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportDocumentNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportNumberNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportSeriesNormalizer;
@@ -50,10 +49,7 @@ final class SoapClientBuilder
 
     private readonly PsrHttpClient $client;
 
-    /**
-     * @var non-empty-string
-     */
-    private readonly string $url;
+    private readonly B2PosClientConfiguration $clientConfiguration;
 
     /**
      * @var non-empty-array<int, Middleware>
@@ -61,20 +57,20 @@ final class SoapClientBuilder
     private readonly array $middlewares;
 
     /**
-     * @param non-empty-string       $url
      * @param array<int, Middleware> $middlewares
      */
     private function __construct(
         XmlSerializer $serializer,
         PsrHttpClient $client,
-        string $url = 'https://api.b2pos.ru',
+        ?B2PosClientConfiguration $clientConfiguration = null,
         array $middlewares = [],
     ) {
-        $this->serializer  = $serializer;
-        $this->client      = $client;
-        $this->url         = $url;
-        $this->middlewares = array_merge($middlewares, [
+        $this->serializer          = $serializer;
+        $this->client              = $client;
+        $this->clientConfiguration = $clientConfiguration ?? new B2PosClientConfiguration('https://api.b2pos.ru');
+        $this->middlewares         = array_merge($middlewares, [
             new UrlMiddleware(),
+            new ResponseContentErrorMiddleware(),
             new ClientErrorMiddleware(),
             new InternalServerMiddleware(),
         ]);
@@ -112,7 +108,6 @@ final class SoapClientBuilder
                 new Base64Normalizer(),
                 new BackedEnumNormalizer(),
                 new DateTimeNormalizer(),
-                new ResponseContentReportsErrorDenormalizer(),
                 new UnwrappingDenormalizer(),
                 new NumericStringDenormalizer(),
                 new ArrayDenormalizer(),
@@ -143,7 +138,7 @@ final class SoapClientBuilder
         return new self(
             $serializer,
             $this->client,
-            $this->url,
+            $this->clientConfiguration,
             $this->middlewares,
         );
     }
@@ -153,20 +148,17 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $client,
-            $this->url,
+            $this->clientConfiguration,
             $this->middlewares,
         );
     }
 
-    /**
-     * @param non-empty-string $url
-     */
-    public function withUrl(string $url): self
+    public function withClientConfiguration(B2PosClientConfiguration $clientConfiguration): self
     {
         return new self(
             $this->serializer,
             $this->client,
-            $url,
+            $clientConfiguration,
             $this->middlewares,
         );
     }
@@ -179,7 +171,7 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
-            $this->url,
+            $this->clientConfiguration,
             $middlewares,
         );
     }
@@ -189,7 +181,7 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
-            $this->url,
+            $this->clientConfiguration,
             array_merge($this->middlewares, [$middleware]),
         );
     }
@@ -198,10 +190,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanProductClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new SoapB2PosClient($this->middlewares, $this->client),
+            $this->clientConfiguration,
         );
     }
 
@@ -209,10 +199,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanApplicationClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new SoapB2PosClient($this->middlewares, $this->client),
+            $this->clientConfiguration,
         );
     }
 
@@ -220,10 +208,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanAgreementClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new SoapB2PosClient($this->middlewares, $this->client),
+            $this->clientConfiguration,
         );
     }
 }

@@ -6,7 +6,7 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware
 
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\BadRequestException;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\ForbiddenException;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\NotFoundException;
@@ -15,9 +15,9 @@ use Yiisoft\Http\Status;
 
 final class ClientErrorMiddleware implements Middleware
 {
-    public function process(Request $request, ConfigurationClient $configuration, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
     {
-        $response   = $next($request, $configuration);
+        $response   = $next($request, $clientConfiguration);
         $statusCode = $response->getStatusCode();
 
         if (Status::UNAUTHORIZED == $statusCode) {
