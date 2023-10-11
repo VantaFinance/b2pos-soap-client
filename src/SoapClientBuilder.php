@@ -34,6 +34,7 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\Base64Normalizer
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\CountryIsoNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\DivisionCodeNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EmailNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EnumDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\MoneyPositiveOrZeroNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\NumericStringDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ObjectDenormalizer;
@@ -124,7 +125,7 @@ final class SoapClientBuilder
                 new RussianPassportSeriesNormalizer(),
                 new EmailNormalizer(),
                 new Base64Normalizer(),
-                new BackedEnumNormalizer(),
+                new EnumDenormalizer(new BackedEnumNormalizer()),
                 new DateTimeNormalizer(),
                 new UnwrappingDenormalizer(),
                 new NumericStringDenormalizer(),
