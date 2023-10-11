@@ -22,23 +22,24 @@ use Symfony\Component\Serializer\Serializer as SerializerSymfony;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\SoapLoanAgreementClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\ConfigurationClient;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\HttpClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\AuthorizationMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ClientErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\PipelineMiddleware;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ResponseContentErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\UrlMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\Base64Normalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\CountryIsoNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\DivisionCodeNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EmailNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EnumDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\MoneyPositiveOrZeroNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\NumericStringDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ObjectDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\PhoneNumberNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ResponseContentReportsErrorDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportDocumentNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportNumberNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportSeriesNormalizer;
@@ -53,7 +54,12 @@ final class SoapClientBuilder
     /**
      * @var non-empty-string
      */
-    private readonly string $url;
+    private readonly string $userId;
+
+    /**
+     * @var non-empty-string
+     */
+    private readonly string $userToken;
 
     /**
      * @var non-empty-array<int, Middleware>
@@ -61,23 +67,30 @@ final class SoapClientBuilder
     private readonly array $middlewares;
 
     /**
-     * @param non-empty-string       $url
-     * @param array<int, Middleware> $middlewares
+     * @var non-empty-string
+     */
+    private readonly string $url;
+
+    /**
+     * @param non-empty-string                 $userId
+     * @param non-empty-string                 $userToken
+     * @param non-empty-string                 $url
+     * @param non-empty-array<int, Middleware> $middlewares
      */
     private function __construct(
         XmlSerializer $serializer,
         PsrHttpClient $client,
+        string $userId,
+        string $userToken,
+        array $middlewares,
         string $url = 'https://api.b2pos.ru',
-        array $middlewares = [],
     ) {
         $this->serializer  = $serializer;
         $this->client      = $client;
+        $this->userId      = $userId;
+        $this->userToken   = $userToken;
+        $this->middlewares = $middlewares;
         $this->url         = $url;
-        $this->middlewares = array_merge($middlewares, [
-            new UrlMiddleware(),
-            new ClientErrorMiddleware(),
-            new InternalServerMiddleware(),
-        ]);
     }
 
     /**
@@ -98,7 +111,9 @@ final class SoapClientBuilder
             propertyTypeExtractor: $typeExtractor,
         );
 
-        $propertyAccessor  = PropertyAccess::createPropertyAccessor();
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $xmlEncoder       = new XmlEncoder();
+
         $serializerSymfony = new SerializerSymfony(
             [
                 new PhoneNumberNormalizer(),
@@ -110,17 +125,14 @@ final class SoapClientBuilder
                 new RussianPassportSeriesNormalizer(),
                 new EmailNormalizer(),
                 new Base64Normalizer(),
-                new BackedEnumNormalizer(),
+                new EnumDenormalizer(new BackedEnumNormalizer()),
                 new DateTimeNormalizer(),
-                new ResponseContentReportsErrorDenormalizer(),
                 new UnwrappingDenormalizer(),
                 new NumericStringDenormalizer(),
                 new ArrayDenormalizer(),
                 new RequestNormalizer(
                     $objectNormalizer,
                     $propertyAccessor,
-                    $userId,
-                    $userToken,
                 ),
                 new ObjectDenormalizer(
                     $objectNormalizer,
@@ -129,13 +141,25 @@ final class SoapClientBuilder
                 $objectNormalizer,
             ],
             [
-                new XmlEncoder(),
+                $xmlEncoder,
             ],
         );
 
         $serializer = new XmlSerializer($serializerSymfony);
 
-        return new self($serializer, $client);
+        return new self(
+            $serializer,
+            $client,
+            $userId,
+            $userToken,
+            [
+                new UrlMiddleware(),
+                new AuthorizationMiddleware($userId, $userToken),
+                new ResponseContentErrorMiddleware($xmlEncoder, $propertyAccessor),
+                new ClientErrorMiddleware(),
+                new InternalServerMiddleware(),
+            ],
+        );
     }
 
     public function withSerializer(XmlSerializer $serializer): self
@@ -143,8 +167,10 @@ final class SoapClientBuilder
         return new self(
             $serializer,
             $this->client,
-            $this->url,
+            $this->userId,
+            $this->userToken,
             $this->middlewares,
+            $this->url,
         );
     }
 
@@ -153,21 +179,26 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $client,
-            $this->url,
+            $this->userId,
+            $this->userToken,
             $this->middlewares,
+            $this->url,
         );
     }
 
     /**
-     * @param non-empty-string $url
+     * @param non-empty-string $userId
+     * @param non-empty-string $userToken
      */
-    public function withUrl(string $url): self
+    public function withCredentials(string $userId, string $userToken): self
     {
         return new self(
             $this->serializer,
             $this->client,
-            $url,
+            $userId,
+            $userToken,
             $this->middlewares,
+            $this->url,
         );
     }
 
@@ -179,8 +210,10 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
-            $this->url,
+            $this->userId,
+            $this->userToken,
             $middlewares,
+            $this->url,
         );
     }
 
@@ -189,8 +222,25 @@ final class SoapClientBuilder
         return new self(
             $this->serializer,
             $this->client,
-            $this->url,
+            $this->userId,
+            $this->userToken,
             array_merge($this->middlewares, [$middleware]),
+            $this->url,
+        );
+    }
+
+    /**
+     * @param non-empty-string $url
+     */
+    public function withUrl(string $url): self
+    {
+        return new self(
+            $this->serializer,
+            $this->client,
+            $this->userId,
+            $this->userToken,
+            $this->middlewares,
+            $url,
         );
     }
 
@@ -198,10 +248,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanProductClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new B2PosClient($this->middlewares, $this->client),
+            new B2PosClientConfiguration($this->url),
         );
     }
 
@@ -209,10 +257,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanApplicationClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new B2PosClient($this->middlewares, $this->client),
+            new B2PosClientConfiguration($this->url),
         );
     }
 
@@ -220,10 +266,8 @@ final class SoapClientBuilder
     {
         return new SoapLoanAgreementClient(
             $this->serializer,
-            new HttpClient(
-                new ConfigurationClient($this->url),
-                new PipelineMiddleware($this->middlewares, $this->client),
-            ),
+            new B2PosClient($this->middlewares, $this->client),
+            new B2PosClientConfiguration($this->url),
         );
     }
 }

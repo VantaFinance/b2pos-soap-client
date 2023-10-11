@@ -26,7 +26,7 @@ final class GetAvailableLoanProductsRequest
      * @var numeric-string|null
      */
     #[SerializedPath('[env:Body][ns1:CalculatorBookOptyRequest][ns1:tradeID]')]
-    public ?string $pointOfSaleId;
+    public readonly ?string $pointOfSaleId;
 
     /**
      * @param numeric-string|null $pointOfSaleId

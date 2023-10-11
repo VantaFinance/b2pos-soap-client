@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\B2posSoapClient;
 
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request\ChooseLoanProductRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request\GetAvailableLoanProductsRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\Bank;
@@ -14,14 +14,12 @@ interface LoanProductClient
 {
     /**
      * @return array<int, Bank>
-     * @throws B2PosSoapClientException
-     * @throws UnexpectedValueException
+     * @throws ClientException
      */
     public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): array;
 
     /**
-     * @throws B2PosSoapClientException
-     * @throws UnexpectedValueException
+     * @throws ClientException
      */
     public function chooseLoanProduct(ChooseLoanProductRequest $request): ChooseLoanProductResponse;
 }

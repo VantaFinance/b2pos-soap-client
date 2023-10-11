@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware;
+namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient;
 
-use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface as PsrHttpClient;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
 
-final class PipelineMiddleware
+final class B2PosClient
 {
     /**
      * @var array<int, Middleware>
      */
-    private array $middlewares;
+    private readonly array $middlewares;
 
-    private PsrHttpClient $client;
+    private readonly PsrHttpClient $client;
 
     /**
      * @param array<int, Middleware> $middlewares
@@ -28,10 +27,7 @@ final class PipelineMiddleware
         $this->client      = $client;
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
-    public function process(Request $request, ConfigurationClient $configuration): Response
+    public function sendRequest(Request $request, B2PosClientConfiguration $clientConfiguration): Response
     {
         $middlewares = $this->middlewares;
         $middleware  = array_shift($middlewares);
@@ -40,6 +36,6 @@ final class PipelineMiddleware
             return $this->client->sendRequest($request);
         }
 
-        return $middleware->process($request, $configuration, [new self($middlewares, $this->client), 'process']);
+        return $middleware->process($request, $clientConfiguration, [new self($middlewares, $this->client), 'sendRequest']);
     }
 }

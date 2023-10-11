@@ -6,8 +6,9 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception;
 
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Vanta\Integration\B2posSoapClient\B2PosSoapClientException;
 
-final class BadRequestException extends HttpException
+final class BadRequestException extends B2PosSoapClientException
 {
     public static function create(Response $response, Request $request): self
     {

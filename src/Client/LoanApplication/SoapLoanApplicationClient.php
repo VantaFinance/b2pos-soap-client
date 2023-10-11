@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication;
 
 use GuzzleHttp\Psr7\Request;
-use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface as PsrHttpClient;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\NewLoanApplicationRequest as NewLoanApplicationRequestFull;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\GetLoanApplicationStatusRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Short\NewLoanApplicationRequest as NewLoanApplicationRequestShort;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\GetLoanApplicationStatusResponse;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ResponseContentReportsErrorDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlSerializer;
 use Vanta\Integration\B2posSoapClient\LoanApplicationClient;
 use Yiisoft\Http\Method;
@@ -23,13 +22,11 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
 {
     public function __construct(
         private readonly Serializer $serializer,
-        private readonly PsrHttpClient $client,
+        private readonly B2PosClient $client,
+        private readonly B2PosClientConfiguration $clientConfiguration,
     ) {
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function newLoanApplicationShort(NewLoanApplicationRequestShort $request): string
     {
         $requestContent = $this->serializer->serialize(
@@ -48,8 +45,11 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr     = $this->client->sendRequest($requestPsr);
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responsePsr = $this->client->sendRequest(
+            $requestPsr,
+            $this->clientConfiguration->withCheckErrorPath('[env:Body][ns1:SendShortOptyResponse]'),
+        );
+        $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
         return $this->serializer->deserialize(
@@ -57,15 +57,11 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             'numeric-string',
             'xml',
             [
-                ResponseContentReportsErrorDenormalizer::CHECK_ERROR_PATH => '[env:Body][ns1:SendShortOptyResponse]',
-                UnwrappingDenormalizer::UNWRAP_PATH                       => '[env:Body][ns1:SendShortOptyResponse][ns1:profileID]',
+                UnwrappingDenormalizer::UNWRAP_PATH => '[env:Body][ns1:SendShortOptyResponse][ns1:profileID]',
             ],
         );
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function newLoanApplicationFull(NewLoanApplicationRequestFull $request): string
     {
         $requestContent = $this->serializer->serialize(
@@ -84,8 +80,11 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr     = $this->client->sendRequest($requestPsr);
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responsePsr = $this->client->sendRequest(
+            $requestPsr,
+            $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:CreateOptyResponse]'),
+        );
+        $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
         return $this->serializer->deserialize(
@@ -93,15 +92,11 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             'numeric-string',
             'xml',
             [
-                ResponseContentReportsErrorDenormalizer::CHECK_ERROR_PATH => '[soapenv:Body][ns1:CreateOptyResponse]',
-                UnwrappingDenormalizer::UNWRAP_PATH                       => '[soapenv:Body][ns1:CreateOptyResponse][ns1:profileID]',
+                UnwrappingDenormalizer::UNWRAP_PATH => '[soapenv:Body][ns1:CreateOptyResponse][ns1:profileID]',
             ],
         );
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     */
     public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse
     {
         $requestContent = $this->serializer->serialize(
@@ -120,16 +115,16 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr     = $this->client->sendRequest($requestPsr);
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responsePsr = $this->client->sendRequest(
+            $requestPsr,
+            $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:StatusOptyResponse]'),
+        );
+        $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
             $responseContent,
             GetLoanApplicationStatusResponse::class,
             'xml',
-            [
-                ResponseContentReportsErrorDenormalizer::CHECK_ERROR_PATH => '[soapenv:Body][ns1:StatusOptyResponse]',
-            ],
         );
     }
 }

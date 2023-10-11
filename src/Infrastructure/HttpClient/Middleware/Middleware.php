@@ -7,14 +7,14 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware
 use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 
 interface Middleware
 {
     /**
-     * @param callable(Request, ConfigurationClient): Response $next
+     * @param callable(Request, B2PosClientConfiguration): Response $next
      *
      * @throws ClientException
      */
-    public function process(Request $request, ConfigurationClient $configuration, callable $next): Response;
+    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response;
 }
