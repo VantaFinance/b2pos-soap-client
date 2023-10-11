@@ -63,7 +63,7 @@ final class MoneyPositiveOrZeroNormalizer implements Normalizer, Denormalizer
 
         try {
             return new MoneyPositiveOrZero(
-                $this->parserDecimal->parse($data, new Currency('RUB')),
+                $this->parserDecimal->parse($data, new Currency('RUB'))->getAmount(),
             );
         } catch (ParserException $e) {
             throw NotNormalizableValueException::createForUnexpectedDataType(
@@ -90,6 +90,6 @@ final class MoneyPositiveOrZeroNormalizer implements Normalizer, Denormalizer
             throw new UnexpectedValueException(sprintf('Allowed type: %s', MoneyPositiveOrZero::class));
         }
 
-        return $this->formatterDecimal->format($object->getValue());
+        return $this->formatterDecimal->format($object->value);
     }
 }
