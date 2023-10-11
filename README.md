@@ -21,9 +21,8 @@
 
 declare(strict_types=1);
 
-$clientPsr = new Psr18Client();
-
-$clientBuilder = SoapClientBuilder::create($clientPsr, 'yourUserId', 'yourUserToken');
+$psr18Client = new Psr18Client();
+$soapClientBuilder = SoapClientBuilder::create($psr18Client, 'yourUserId', 'yourUserToken');
 
 $request = new NewLoanApplicationRequestShort(
     userInn: '123456789012',
@@ -49,7 +48,8 @@ $request = new NewLoanApplicationRequestShort(
     )],
 );
 
-$response = $clientBuilder->createLoanApplicationClient()->newLoanApplicationShort($request);
-
+$response = $soapClientBuilder
+    ->createLoanApplicationClient()
+    ->newLoanApplicationShort($request)
 ;
 ```
