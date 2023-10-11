@@ -41,7 +41,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -49,7 +51,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[env:Body][ns1:SendShortOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
         return $this->serializer->deserialize(
@@ -76,7 +78,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -84,7 +88,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:CreateOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
         return $this->serializer->deserialize(
@@ -111,7 +115,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -119,7 +125,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:StatusOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
             $responseContent,

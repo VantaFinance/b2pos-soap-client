@@ -38,7 +38,9 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -46,7 +48,7 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:AuthOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
             $responseContent,

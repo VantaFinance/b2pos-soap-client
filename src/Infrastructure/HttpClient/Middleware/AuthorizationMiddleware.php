@@ -33,7 +33,7 @@ final class AuthorizationMiddleware implements Middleware
 
     public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
     {
-        $requestContents = $request->getBody()->getContents();
+        $requestContents = $request->getBody()->__toString();
 
         $requestContents = str_replace(
             [

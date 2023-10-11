@@ -41,7 +41,9 @@ final class SoapLoanProductClient implements LoanProductClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -49,7 +51,7 @@ final class SoapLoanProductClient implements LoanProductClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[env:Body][ns1:CalculatorBookOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
             $responseContent,
@@ -76,7 +78,9 @@ final class SoapLoanProductClient implements LoanProductClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [],
+            [
+                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
+            ],
             $requestContent,
         );
 
@@ -84,7 +88,7 @@ final class SoapLoanProductClient implements LoanProductClient
             $requestPsr,
             $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:AcceptOptyResponse]'),
         );
-        $responseContent = $responsePsr->getBody()->getContents();
+        $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
             $responseContent,

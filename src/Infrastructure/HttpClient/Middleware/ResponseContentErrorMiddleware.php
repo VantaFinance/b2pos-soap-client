@@ -35,7 +35,7 @@ final class ResponseContentErrorMiddleware implements Middleware
             throw CheckErrorPathMissingException::create($response, $request);
         }
 
-        $responseData = $response->getBody()->getContents();
+        $responseData = $response->getBody()->__toString();
         $response->getBody()->rewind(); // иначе следующий вызов getContents() вернет пустую строку
 
         if ('' === $responseData) {
