@@ -14,12 +14,12 @@ final class AuthorizationMiddleware implements Middleware
     /**
      * @var non-empty-string
      */
-    private string $userId;
+    private readonly string $userId;
 
     /**
      * @var non-empty-string
      */
-    private string $userToken;
+    private readonly string $userToken;
 
     /**
      * @param non-empty-string $userId
@@ -50,6 +50,8 @@ final class AuthorizationMiddleware implements Middleware
         $request = $request->withBody(
             Utils::streamFor($requestContents),
         );
+
+        $request = $request->withHeader('Content-Type', 'application/soap+xml');
 
         return $next($request, $clientConfiguration);
     }

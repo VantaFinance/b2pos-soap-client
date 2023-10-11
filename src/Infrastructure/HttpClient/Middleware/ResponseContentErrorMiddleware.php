@@ -6,24 +6,23 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware
 
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface as PropertyAccessor;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface as Decoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\CheckErrorPathMissingException;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\ResponseContentErrorException;
 
 final class ResponseContentErrorMiddleware implements Middleware
 {
-    private Decoder $decoder;
+    private readonly Decoder $decoder;
 
-    private PropertyAccessor $propertyAccessor;
+    private readonly PropertyAccessor $propertyAccessor;
 
-    public function __construct()
+    public function __construct(DecoderInterface $xmlDecoder, PropertyAccessor $propertyAccessor)
     {
-        $this->decoder          = new XmlEncoder();
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->decoder          = $xmlDecoder;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
@@ -36,7 +35,7 @@ final class ResponseContentErrorMiddleware implements Middleware
         }
 
         $responseData = $response->getBody()->__toString();
-        $response->getBody()->rewind(); // иначе следующий вызов getContents() вернет пустую строку
+        $response->getBody()->rewind(); // иначе следующий вызов __toString() вернет пустую строку
 
         if ('' === $responseData) {
             return $response;

@@ -14,9 +14,9 @@ final class B2PosClient
     /**
      * @var array<int, Middleware>
      */
-    private array $middlewares;
+    private readonly array $middlewares;
 
-    private PsrHttpClient $client;
+    private readonly PsrHttpClient $client;
 
     /**
      * @param array<int, Middleware> $middlewares
