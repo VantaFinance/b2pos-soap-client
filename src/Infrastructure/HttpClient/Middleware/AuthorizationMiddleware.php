@@ -34,7 +34,6 @@ final class AuthorizationMiddleware implements Middleware
     public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
     {
         $requestContents = $request->getBody()->__toString();
-
         $requestContents = str_replace(
             [
                 '#userId#',
@@ -47,11 +46,9 @@ final class AuthorizationMiddleware implements Middleware
             $requestContents,
         );
 
-        $request = $request->withBody(
-            Utils::streamFor($requestContents),
-        );
-
-        $request = $request->withHeader('Content-Type', 'application/soap+xml');
+        $request = $request->withBody(Utils::streamFor($requestContents))
+            ->withHeader('Content-Type', 'application/soap+xml')
+        ;
 
         return $next($request, $clientConfiguration);
     }
