@@ -61,41 +61,35 @@ final class SoapClientBuilder
     private readonly string $userToken;
 
     /**
-     * @var non-empty-string
-     */
-    private readonly string $url;
-
-    /**
      * @var non-empty-array<int, Middleware>
      */
     private readonly array $middlewares;
 
     /**
-     * @param non-empty-string       $userId
-     * @param non-empty-string       $userToken
-     * @param non-empty-string       $url
-     * @param array<int, Middleware> $middlewares
+     * @var non-empty-string
+     */
+    private readonly string $url;
+
+    /**
+     * @param non-empty-string                 $userId
+     * @param non-empty-string                 $userToken
+     * @param non-empty-string                 $url
+     * @param non-empty-array<int, Middleware> $middlewares
      */
     private function __construct(
         XmlSerializer $serializer,
         PsrHttpClient $client,
         string $userId,
         string $userToken,
+        array $middlewares,
         string $url = 'https://api.b2pos.ru',
-        array $middlewares = [],
     ) {
         $this->serializer  = $serializer;
         $this->client      = $client;
         $this->userId      = $userId;
         $this->userToken   = $userToken;
+        $this->middlewares = $middlewares;
         $this->url         = $url;
-        $this->middlewares = array_merge($middlewares, [
-            new UrlMiddleware(),
-            new AuthorizationMiddleware($userId, $userToken),
-            new ResponseContentErrorMiddleware(),
-            new ClientErrorMiddleware(),
-            new InternalServerMiddleware(),
-        ]);
     }
 
     /**
@@ -150,7 +144,19 @@ final class SoapClientBuilder
 
         $serializer = new XmlSerializer($serializerSymfony);
 
-        return new self($serializer, $client, $userId, $userToken);
+        return new self(
+            $serializer,
+            $client,
+            $userId,
+            $userToken,
+            [
+                new UrlMiddleware(),
+                new AuthorizationMiddleware($userId, $userToken),
+                new ResponseContentErrorMiddleware(),
+                new ClientErrorMiddleware(),
+                new InternalServerMiddleware(),
+            ],
+        );
     }
 
     public function withSerializer(XmlSerializer $serializer): self
@@ -160,8 +166,8 @@ final class SoapClientBuilder
             $this->client,
             $this->userId,
             $this->userToken,
-            $this->url,
             $this->middlewares,
+            $this->url,
         );
     }
 
@@ -172,8 +178,8 @@ final class SoapClientBuilder
             $client,
             $this->userId,
             $this->userToken,
-            $this->url,
             $this->middlewares,
+            $this->url,
         );
     }
 
@@ -188,23 +194,8 @@ final class SoapClientBuilder
             $this->client,
             $userId,
             $userToken,
+            $this->middlewares,
             $this->url,
-            $this->middlewares,
-        );
-    }
-
-    /**
-     * @param non-empty-string $url
-     */
-    public function withUrl(string $url): self
-    {
-        return new self(
-            $this->serializer,
-            $this->client,
-            $this->userId,
-            $this->userToken,
-            $url,
-            $this->middlewares,
         );
     }
 
@@ -218,8 +209,8 @@ final class SoapClientBuilder
             $this->client,
             $this->userId,
             $this->userToken,
-            $this->url,
             $middlewares,
+            $this->url,
         );
     }
 
@@ -230,8 +221,23 @@ final class SoapClientBuilder
             $this->client,
             $this->userId,
             $this->userToken,
-            $this->url,
             array_merge($this->middlewares, [$middleware]),
+            $this->url,
+        );
+    }
+
+    /**
+     * @param non-empty-string $url
+     */
+    public function withUrl(string $url): self
+    {
+        return new self(
+            $this->serializer,
+            $this->client,
+            $this->userId,
+            $this->userToken,
+            $this->middlewares,
+            $url,
         );
     }
 
