@@ -14,7 +14,7 @@ final class MoneyPositiveOrZero implements Stringable
     public readonly Money $value;
 
     /**
-     * @param numeric-string $amount
+     * @param numeric-string $amount - сумма в копейках
      */
     public function __construct(string $amount)
     {
