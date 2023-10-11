@@ -26,6 +26,7 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\AuthorizationMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ClientErrorMiddleware;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ContentTypeHeaderMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ResponseContentErrorMiddleware;
@@ -151,6 +152,7 @@ final class SoapClientBuilder
             $userToken,
             [
                 new UrlMiddleware(),
+                new ContentTypeHeaderMiddleware(),
                 new AuthorizationMiddleware($userId, $userToken),
                 new ResponseContentErrorMiddleware(),
                 new ClientErrorMiddleware(),

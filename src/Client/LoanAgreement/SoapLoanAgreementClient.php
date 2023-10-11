@@ -38,9 +38,7 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [
-                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
-            ],
+            [],
             $requestContent,
         );
 

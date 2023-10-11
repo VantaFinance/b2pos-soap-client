@@ -41,9 +41,7 @@ final class SoapLoanProductClient implements LoanProductClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [
-                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
-            ],
+            [],
             $requestContent,
         );
 
@@ -78,9 +76,7 @@ final class SoapLoanProductClient implements LoanProductClient
         $requestPsr = new Request(
             Method::POST,
             '/loan/',
-            [
-                'Content-Type' => 'application/soap+xml', // иначе не работает на guzzlehttp/guzzle
-            ],
+            [],
             $requestContent,
         );
 
