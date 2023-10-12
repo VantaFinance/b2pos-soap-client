@@ -27,14 +27,14 @@ final class Offer
     #[SerializedPath('[ns1:insuranceAmount]')]
     public readonly MoneyPositiveOrZero $insuranceAmount;
 
-    #[SerializedPath('[ns1:otherAmount]')]
-    public readonly MoneyPositiveOrZero $otherProductsAmount;
-
     #[SerializedPath('[ns1:rate]')]
     public readonly float $loanRate;
 
+    #[SerializedPath('[ns1:otherAmount]')]
+    public readonly ?MoneyPositiveOrZero $otherProductsAmount;
+
     #[SerializedPath('[ns1:rebate]')]
-    public readonly float $discount;
+    public readonly ?float $discount;
 
     /**
      * @var numeric-string|null
@@ -59,9 +59,9 @@ final class Offer
         MoneyPositiveOrZero $initialPaymentAmount,
         MoneyPositiveOrZero $paymentAmountInMonth,
         MoneyPositiveOrZero $insuranceAmount,
-        MoneyPositiveOrZero $otherProductsAmount,
         float $loanRate,
-        float $discount,
+        ?MoneyPositiveOrZero $otherProductsAmount,
+        ?float $discount,
         ?string $loanProductId,
         ?string $loanProductName,
     ) {
@@ -70,8 +70,8 @@ final class Offer
         $this->initialPaymentAmount = $initialPaymentAmount;
         $this->paymentAmountInMonth = $paymentAmountInMonth;
         $this->insuranceAmount      = $insuranceAmount;
-        $this->otherProductsAmount  = $otherProductsAmount;
         $this->loanRate             = $loanRate;
+        $this->otherProductsAmount  = $otherProductsAmount;
         $this->discount             = $discount;
         $this->loanProductId        = $loanProductId;
         $this->loanProductName      = $loanProductName;
