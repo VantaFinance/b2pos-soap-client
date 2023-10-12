@@ -10,7 +10,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder as XmlEncoderSymfony;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -34,7 +34,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\Base64Normalizer
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\CountryIsoNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\DivisionCodeNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EmailNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\EnumDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\MoneyPositiveOrZeroNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\NumericStringDenormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\ObjectDenormalizer;
@@ -43,6 +42,7 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalize
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportDocumentNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportNumberNormalizer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RussianPassportSeriesNormalizer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlEncoder;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlSerializer;
 
 final class SoapClientBuilder
@@ -112,7 +112,7 @@ final class SoapClientBuilder
         );
 
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $xmlEncoder       = new XmlEncoder();
+        $xmlEncoder       = new XmlEncoder(new XmlEncoderSymfony());
 
         $serializerSymfony = new SerializerSymfony(
             [
@@ -125,7 +125,7 @@ final class SoapClientBuilder
                 new RussianPassportSeriesNormalizer(),
                 new EmailNormalizer(),
                 new Base64Normalizer(),
-                new EnumDenormalizer(new BackedEnumNormalizer()),
+                new BackedEnumNormalizer(),
                 new DateTimeNormalizer(),
                 new UnwrappingDenormalizer(),
                 new NumericStringDenormalizer(),

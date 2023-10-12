@@ -9,16 +9,16 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 final class Bank
 {
     /**
-     * @var numeric-string
+     * @var numeric-string|null
      */
     #[SerializedPath('[ns1:id]')]
-    public readonly string $id;
+    public readonly ?string $id;
 
     /**
-     * @var non-empty-string
+     * @var non-empty-string|null
      */
     #[SerializedPath('[ns1:value]')]
-    public readonly string $name;
+    public readonly ?string $name;
 
     /**
      * @var array<int, LoanProduct>
@@ -27,13 +27,13 @@ final class Bank
     public readonly array $availableLoanProducts;
 
     /**
-     * @param numeric-string          $id
-     * @param non-empty-string        $name
+     * @param numeric-string|null     $id
+     * @param non-empty-string|null   $name
      * @param array<int, LoanProduct> $availableLoanProducts
      */
     public function __construct(
-        string $id,
-        string $name,
+        ?string $id = null,
+        ?string $name = null,
         array $availableLoanProducts = [],
     ) {
         $this->id                    = $id;

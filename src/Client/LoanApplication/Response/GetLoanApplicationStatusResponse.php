@@ -14,6 +14,9 @@ final class GetLoanApplicationStatusResponse
     #[SerializedPath('[soapenv:Body][ns1:StatusOptyResponse][ns1:profileID]')]
     public readonly ?string $loanApplicationId;
 
+    /**
+     * @var numeric-string|null
+     */
     #[SerializedPath('[soapenv:Body][ns1:StatusOptyResponse][ns1:codeAgentMarket]')]
     public readonly ?string $employeeCodeInShop;
 
@@ -25,6 +28,7 @@ final class GetLoanApplicationStatusResponse
 
     /**
      * @param numeric-string|null        $loanApplicationId
+     * @param numeric-string|null        $employeeCodeInShop
      * @param array<int, ResultFromBank> $resultFromBanks
      */
     public function __construct(

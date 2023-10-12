@@ -26,6 +26,7 @@ final class CountryIsoNormalizer implements Normalizer, Denormalizer
     }
 
     /**
+     * @param non-empty-string      $data
      * @param array<string, string> $context
      */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): CountryIso
@@ -33,16 +34,6 @@ final class CountryIsoNormalizer implements Normalizer, Denormalizer
         if (!is_string($data)) {
             throw NotNormalizableValueException::createForUnexpectedDataType(
                 sprintf('Ожидали строку,получили:%s.', get_debug_type($data)),
-                $data,
-                [Type::BUILTIN_TYPE_STRING],
-                $context['deserialization_path'] ?? null,
-                true
-            );
-        }
-
-        if ('' == $data) {
-            throw NotNormalizableValueException::createForUnexpectedDataType(
-                'Ожидали не пустую строку',
                 $data,
                 [Type::BUILTIN_TYPE_STRING],
                 $context['deserialization_path'] ?? null,
