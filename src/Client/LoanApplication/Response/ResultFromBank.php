@@ -10,12 +10,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\SignType;
 
 final class ResultFromBank
 {
-    /**
-     * @var numeric-string
-     */
-    #[SerializedPath('[ns1:bank]')]
-    public readonly string $bankId;
-
     #[SerializedPath('[ns1:signType]')]
     public readonly SignType $signTypeAvailableForLoanApplicationAndBank;
 
@@ -24,6 +18,12 @@ final class ResultFromBank
 
     #[SerializedPath('[ns1:signedTypeStatus]')]
     public readonly bool $isSesSigned; // Simple Electronic Signature
+
+    /**
+     * @var numeric-string|null
+     */
+    #[SerializedPath('[ns1:bank]')]
+    public readonly ?string $bankId;
 
     #[SerializedPath('[ns1:decision]')]
     public readonly ?BankDecision $decision;
@@ -86,46 +86,46 @@ final class ResultFromBank
     public readonly ?bool $isOldClientSes;
 
     /**
-     * @var array<int, Insurance>
+     * @var non-empty-array<int, Insurance>|null
      */
     #[SerializedPath('[ns1:insurances][ns1:insurance]')]
-    public readonly array $insurances;
+    public readonly ?array $insurances;
 
     /**
-     * @param numeric-string        $bankId
-     * @param non-empty-string|null $errorText
-     * @param numeric-string|null   $chosenBankProductId
-     * @param non-empty-string|null $loanAgreementNumber
-     * @param non-empty-string|null $authorizationCode
-     * @param array<int, Insurance> $insurances
-     * @param non-empty-string|null $branchCode
-     * @param non-empty-string|null $authorizationUserCode
+     * @param numeric-string|null                  $bankId
+     * @param non-empty-string|null                $errorText
+     * @param numeric-string|null                  $chosenBankProductId
+     * @param non-empty-string|null                $loanAgreementNumber
+     * @param non-empty-string|null                $authorizationCode
+     * @param non-empty-string|null                $branchCode
+     * @param non-empty-string|null                $authorizationUserCode
+     * @param non-empty-array<int, Insurance>|null $insurances
      */
     public function __construct(
-        string $bankId,
         SignType $signTypeAvailableForLoanApplicationAndBank,
         SignType $signType,
         bool $isSesSigned,
-        ?BankDecision $decision,
-        ?string $errorText,
-        ?string $chosenBankProductId,
-        ?bool $isLoanAgreementAuthorized,
-        ?string $loanAgreementNumber,
-        ?string $authorizationCode,
-        ?bool $isLoanApplicationCanceled,
-        ?bool $isLoanAgreementAuthorizationCancel,
-        ?bool $isIncreasedLimitApproved,
-        ?Offer $offer,
-        ?string $branchCode,
-        ?string $authorizationUserCode,
-        ?bool $sesAvailable,
-        ?bool $isOldClientSes,
-        array $insurances = [],
+        ?string $bankId = null,
+        ?BankDecision $decision = null,
+        ?string $errorText = null,
+        ?string $chosenBankProductId = null,
+        ?bool $isLoanAgreementAuthorized = null,
+        ?string $loanAgreementNumber = null,
+        ?string $authorizationCode = null,
+        ?bool $isLoanApplicationCanceled = null,
+        ?bool $isLoanAgreementAuthorizationCancel = null,
+        ?bool $isIncreasedLimitApproved = null,
+        ?Offer $offer = null,
+        ?string $branchCode = null,
+        ?string $authorizationUserCode = null,
+        ?bool $sesAvailable = null,
+        ?bool $isOldClientSes = null,
+        ?array $insurances = null,
     ) {
-        $this->bankId                                     = $bankId;
         $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
         $this->signType                                   = $signType;
         $this->isSesSigned                                = $isSesSigned;
+        $this->bankId                                     = $bankId;
         $this->decision                                   = $decision;
         $this->errorText                                  = $errorText;
         $this->chosenBankProductId                        = $chosenBankProductId;

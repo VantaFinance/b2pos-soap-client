@@ -14,7 +14,7 @@ use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\ChooseLoanProd
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlSerializer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlEncoder;
 use Vanta\Integration\B2posSoapClient\LoanProductClient;
 use Yiisoft\Http\Method;
 
@@ -27,14 +27,14 @@ final class SoapLoanProductClient implements LoanProductClient
     ) {
     }
 
-    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): array
+    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): ?array
     {
         $requestContent = $this->serializer->serialize(
             $request,
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[env:Body][ns1:CalculatorBookOptyRequest]',
-                XmlSerializer::FIELD_NAME_PREFIX           => 'ns1:',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'ns1:',
             ],
         );
 
@@ -51,15 +51,17 @@ final class SoapLoanProductClient implements LoanProductClient
         );
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
+        /** @var non-empty-array<int, Bank> $availableLoanProductsByBanks */
+        $availableLoanProductsByBanks = $this->serializer->deserialize(
             $responseContent,
             Bank::class . '[]',
             'xml',
             [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[env:Body][ns1:CalculatorBookOptyResponse][ns1:selectedBanks][ns1:selectedBank]',
-                XmlSerializer::DEFAULT_VALUE        => [],
             ],
         );
+
+        return $availableLoanProductsByBanks;
     }
 
     public function chooseLoanProduct(ChooseLoanProductRequest $request): ChooseLoanProductResponse
@@ -69,7 +71,7 @@ final class SoapLoanProductClient implements LoanProductClient
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:AcceptOptyRequest]',
-                XmlSerializer::FIELD_NAME_PREFIX           => 'api:',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'api:',
             ],
         );
 

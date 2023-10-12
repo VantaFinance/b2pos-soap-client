@@ -19,9 +19,9 @@ final class ResponseContentErrorMiddleware implements Middleware
 
     private readonly PropertyAccessor $propertyAccessor;
 
-    public function __construct(DecoderInterface $xmlDecoder, PropertyAccessor $propertyAccessor)
+    public function __construct(DecoderInterface $decoder, PropertyAccessor $propertyAccessor)
     {
-        $this->decoder          = $xmlDecoder;
+        $this->decoder          = $decoder;
         $this->propertyAccessor = $propertyAccessor;
     }
 

@@ -13,10 +13,10 @@ use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\ChooseLoanProd
 interface LoanProductClient
 {
     /**
-     * @return array<int, Bank>
+     * @return non-empty-array<int, Bank>|null
      * @throws ClientException
      */
-    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): array;
+    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): ?array;
 
     /**
      * @throws ClientException

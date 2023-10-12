@@ -9,12 +9,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Base64;
 
 final class ChooseLoanProductResponse
 {
-    /**
-     * @var numeric-string
-     */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
-    public readonly string $loanApplicationId;
-
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:success]')]
     public readonly bool $isResultSuccess;
 
@@ -22,40 +16,46 @@ final class ChooseLoanProductResponse
     public readonly Base64 $loanAgreement;
 
     /**
-     * @var non-empty-string
+     * @var numeric-string|null
+     */
+    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
+    public readonly ?string $loanApplicationId;
+
+    /**
+     * @var non-empty-string|null
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:agreementNumber]')]
-    public readonly string $loanAgreementNumber;
+    public readonly ?string $loanAgreementNumber;
 
     /**
-     * @var non-empty-string
+     * @var non-empty-string|null
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:accountNumber]')]
-    public readonly string $accountNumber;
+    public readonly ?string $accountNumber;
 
     /**
-     * @var array<int, AdditionalDocument>
+     * @var non-empty-array<int, AdditionalDocument>
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:additionalDocuments][api:document]')]
-    public readonly array $additionalDocument;
+    public readonly ?array $additionalDocument;
 
     /**
-     * @param numeric-string                 $loanApplicationId
-     * @param non-empty-string               $loanAgreementNumber
-     * @param non-empty-string               $accountNumber
-     * @param array<int, AdditionalDocument> $additionalDocument
+     * @param numeric-string|null                      $loanApplicationId
+     * @param non-empty-string|null                    $loanAgreementNumber
+     * @param non-empty-string|null                    $accountNumber
+     * @param non-empty-array<int, AdditionalDocument> $additionalDocument
      */
     public function __construct(
-        string $loanApplicationId,
         bool $isResultSuccess,
         Base64 $loanAgreement,
-        string $loanAgreementNumber,
-        string $accountNumber,
-        array $additionalDocument,
+        ?string $loanApplicationId = null,
+        ?string $loanAgreementNumber = null,
+        ?string $accountNumber = null,
+        ?array $additionalDocument = null,
     ) {
-        $this->loanApplicationId   = $loanApplicationId;
         $this->isResultSuccess     = $isResultSuccess;
         $this->loanAgreement       = $loanAgreement;
+        $this->loanApplicationId   = $loanApplicationId;
         $this->loanAgreementNumber = $loanAgreementNumber;
         $this->accountNumber       = $accountNumber;
         $this->additionalDocument  = $additionalDocument;
