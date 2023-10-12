@@ -21,20 +21,20 @@ final class GetLoanApplicationStatusResponse
     public readonly ?string $employeeCodeInShop;
 
     /**
-     * @var non-empty-array<int, ResultFromBank>|null
+     * @var array<int, ResultFromBank>
      */
     #[SerializedPath('[soapenv:Body][ns1:StatusOptyResponse][ns1:results][ns1:result]')]
-    public readonly ?array $resultFromBanks;
+    public readonly array $resultFromBanks;
 
     /**
-     * @param numeric-string|null                       $loanApplicationId
-     * @param numeric-string|null                       $employeeCodeInShop
-     * @param non-empty-array<int, ResultFromBank>|null $resultFromBanks
+     * @param numeric-string|null        $loanApplicationId
+     * @param numeric-string|null        $employeeCodeInShop
+     * @param array<int, ResultFromBank> $resultFromBanks
      */
     public function __construct(
         ?string $loanApplicationId = null,
         ?string $employeeCodeInShop = null,
-        ?array $resultFromBanks = null,
+        array $resultFromBanks = [],
     ) {
         $this->loanApplicationId  = $loanApplicationId;
         $this->employeeCodeInShop = $employeeCodeInShop;

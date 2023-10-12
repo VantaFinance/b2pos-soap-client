@@ -86,20 +86,20 @@ final class ResultFromBank
     public readonly ?bool $isOldClientSes;
 
     /**
-     * @var non-empty-array<int, Insurance>|null
+     * @var array<int, Insurance>
      */
     #[SerializedPath('[ns1:insurances][ns1:insurance]')]
-    public readonly ?array $insurances;
+    public readonly array $insurances;
 
     /**
-     * @param numeric-string|null                  $bankId
-     * @param non-empty-string|null                $errorText
-     * @param numeric-string|null                  $chosenBankProductId
-     * @param non-empty-string|null                $loanAgreementNumber
-     * @param non-empty-string|null                $authorizationCode
-     * @param non-empty-string|null                $branchCode
-     * @param non-empty-string|null                $authorizationUserCode
-     * @param non-empty-array<int, Insurance>|null $insurances
+     * @param numeric-string|null   $bankId
+     * @param non-empty-string|null $errorText
+     * @param numeric-string|null   $chosenBankProductId
+     * @param non-empty-string|null $loanAgreementNumber
+     * @param non-empty-string|null $authorizationCode
+     * @param non-empty-string|null $branchCode
+     * @param non-empty-string|null $authorizationUserCode
+     * @param array<int, Insurance> $insurances
      */
     public function __construct(
         SignType $signTypeAvailableForLoanApplicationAndBank,
@@ -120,7 +120,7 @@ final class ResultFromBank
         ?string $authorizationUserCode = null,
         ?bool $sesAvailable = null,
         ?bool $isOldClientSes = null,
-        ?array $insurances = null,
+        array $insurances = [],
     ) {
         $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
         $this->signType                                   = $signType;

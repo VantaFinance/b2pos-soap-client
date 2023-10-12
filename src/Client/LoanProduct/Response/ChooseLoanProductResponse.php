@@ -34,16 +34,16 @@ final class ChooseLoanProductResponse
     public readonly ?string $accountNumber;
 
     /**
-     * @var non-empty-array<int, AdditionalDocument>
+     * @var array<int, AdditionalDocument>
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:additionalDocuments][api:document]')]
-    public readonly ?array $additionalDocument;
+    public readonly array $additionalDocument;
 
     /**
-     * @param numeric-string|null                      $loanApplicationId
-     * @param non-empty-string|null                    $loanAgreementNumber
-     * @param non-empty-string|null                    $accountNumber
-     * @param non-empty-array<int, AdditionalDocument> $additionalDocument
+     * @param numeric-string|null            $loanApplicationId
+     * @param non-empty-string|null          $loanAgreementNumber
+     * @param non-empty-string|null          $accountNumber
+     * @param array<int, AdditionalDocument> $additionalDocument
      */
     public function __construct(
         bool $isResultSuccess,
@@ -51,7 +51,7 @@ final class ChooseLoanProductResponse
         ?string $loanApplicationId = null,
         ?string $loanAgreementNumber = null,
         ?string $accountNumber = null,
-        ?array $additionalDocument = null,
+        array $additionalDocument = [],
     ) {
         $this->isResultSuccess     = $isResultSuccess;
         $this->loanAgreement       = $loanAgreement;

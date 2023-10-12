@@ -21,20 +21,20 @@ final class Bank
     public readonly ?string $name;
 
     /**
-     * @var non-empty-array<int, LoanProduct>
+     * @var array<int, LoanProduct>
      */
     #[SerializedPath('[ns1:creditProducts][ns1:creditProduct]')]
-    public readonly ?array $availableLoanProducts;
+    public readonly array $availableLoanProducts;
 
     /**
-     * @param numeric-string|null                    $id
-     * @param non-empty-string|null                  $name
-     * @param non-empty-array<int, LoanProduct>|null $availableLoanProducts
+     * @param numeric-string|null     $id
+     * @param non-empty-string|null   $name
+     * @param array<int, LoanProduct> $availableLoanProducts
      */
     public function __construct(
         ?string $id = null,
         ?string $name = null,
-        ?array $availableLoanProducts = null,
+        array $availableLoanProducts = [],
     ) {
         $this->id                    = $id;
         $this->name                  = $name;

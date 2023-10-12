@@ -49,7 +49,7 @@ final class XmlEncoder implements Encoder, Decoder
             ],
         ];
 
-        $dataToEncode      = $dataByFieldNamePrefix[$context[self::FIELD_NAME_PREFIX]] ?? null;
+        $dataToEncode    = $dataByFieldNamePrefix[$context[self::FIELD_NAME_PREFIX]] ?? null;
         $contextToEncode = $contextByFieldNamePrefix[$context[self::FIELD_NAME_PREFIX]] ?? null;
 
         if (null === $dataToEncode || null === $contextToEncode) {
@@ -67,7 +67,7 @@ final class XmlEncoder implements Encoder, Decoder
         }
 
         $dataToEncode['#'] = $data;
-        $contextToEncode = array_merge(
+        $contextToEncode   = array_merge(
             [
                 XmlEncoderSymfony::VERSION  => '1.0',
                 XmlEncoderSymfony::ENCODING => 'UTF-8',

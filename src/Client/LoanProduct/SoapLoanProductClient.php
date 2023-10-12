@@ -27,7 +27,7 @@ final class SoapLoanProductClient implements LoanProductClient
     ) {
     }
 
-    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): ?array
+    public function getAvailableLoanProducts(GetAvailableLoanProductsRequest $request): array
     {
         $requestContent = $this->serializer->serialize(
             $request,
@@ -51,8 +51,7 @@ final class SoapLoanProductClient implements LoanProductClient
         );
         $responseContent = $responsePsr->getBody()->__toString();
 
-        /** @var non-empty-array<int, Bank> $availableLoanProductsByBanks */
-        $availableLoanProductsByBanks = $this->serializer->deserialize(
+        return $this->serializer->deserialize(
             $responseContent,
             Bank::class . '[]',
             'xml',
@@ -60,8 +59,6 @@ final class SoapLoanProductClient implements LoanProductClient
                 UnwrappingDenormalizer::UNWRAP_PATH => '[env:Body][ns1:CalculatorBookOptyResponse][ns1:selectedBanks][ns1:selectedBank]',
             ],
         );
-
-        return $availableLoanProductsByBanks;
     }
 
     public function chooseLoanProduct(ChooseLoanProductRequest $request): ChooseLoanProductResponse
