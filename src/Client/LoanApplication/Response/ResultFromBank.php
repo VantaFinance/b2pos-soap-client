@@ -25,6 +25,18 @@ final class ResultFromBank
     #[SerializedPath('[ns1:bank]')]
     public readonly ?string $bankId;
 
+    /**
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:bankName]')]
+    public readonly ?string $bankName;
+
+    /**
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:bankCode]')]
+    public readonly ?string $bankCode;
+
     #[SerializedPath('[ns1:decision]')]
     public readonly ?BankDecision $decision;
 
@@ -93,6 +105,8 @@ final class ResultFromBank
 
     /**
      * @param numeric-string|null   $bankId
+     * @param non-empty-string|null $bankName
+     * @param non-empty-string|null $bankCode
      * @param non-empty-string|null $errorText
      * @param numeric-string|null   $chosenBankProductId
      * @param non-empty-string|null $loanAgreementNumber
@@ -106,6 +120,8 @@ final class ResultFromBank
         SignType $signType,
         bool $isSesSigned,
         ?string $bankId = null,
+        ?string $bankName = null,
+        ?string $bankCode = null,
         ?BankDecision $decision = null,
         ?string $errorText = null,
         ?string $chosenBankProductId = null,
@@ -126,6 +142,8 @@ final class ResultFromBank
         $this->signType                                   = $signType;
         $this->isSesSigned                                = $isSesSigned;
         $this->bankId                                     = $bankId;
+        $this->bankName                                   = $bankName;
+        $this->bankCode                                   = $bankCode;
         $this->decision                                   = $decision;
         $this->errorText                                  = $errorText;
         $this->chosenBankProductId                        = $chosenBankProductId;
