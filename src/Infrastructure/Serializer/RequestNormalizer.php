@@ -33,7 +33,7 @@ final class RequestNormalizer implements Normalizer
     {
         return is_object($data)
             && ($context[self::ROOT_REQUEST_CLASS] ?? null) == $data::class
-            && array_key_exists(XmlSerializer::FIELD_NAME_PREFIX, $context)
+            && array_key_exists(XmlEncoder::FIELD_NAME_PREFIX, $context)
         ;
     }
 
@@ -48,14 +48,14 @@ final class RequestNormalizer implements Normalizer
             throw new UnexpectedValueException(sprintf('Allowed class: %s, %s given', self::ROOT_REQUEST_CLASS, get_debug_type($object)));
         }
 
-        if (!array_key_exists(XmlSerializer::FIELD_NAME_PREFIX, $context)) {
+        if (!array_key_exists(XmlEncoder::FIELD_NAME_PREFIX, $context)) {
             throw new UnexpectedValueException('FIELD_NAME_PREFIX in context required');
         }
 
         $requestNormalized = $this->objectNormalizer->normalize($object, $format, $context);
 
-        $userIdFieldPath    = sprintf('%s[%suserID]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlSerializer::FIELD_NAME_PREFIX]);
-        $userTokenFieldPath = sprintf('%s[%suserToken]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlSerializer::FIELD_NAME_PREFIX]);
+        $userIdFieldPath    = sprintf('%s[%suserID]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlEncoder::FIELD_NAME_PREFIX]);
+        $userTokenFieldPath = sprintf('%s[%suserToken]', $context[self::AUTHORIZATION_DATA_PATH], $context[XmlEncoder::FIELD_NAME_PREFIX]);
 
         $this->propertyAccessor->setValue($requestNormalized, $userIdFieldPath, '#userId#');
         $this->propertyAccessor->setValue($requestNormalized, $userTokenFieldPath, '#userToken#');

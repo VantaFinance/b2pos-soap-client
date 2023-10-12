@@ -51,16 +51,6 @@ final class MoneyPositiveOrZeroNormalizer implements Normalizer, Denormalizer
             );
         }
 
-        if ('' == $data) {
-            throw NotNormalizableValueException::createForUnexpectedDataType(
-                'Ожидали не пустую строку',
-                $data,
-                [Type::BUILTIN_TYPE_STRING],
-                $context['deserialization_path'] ?? null,
-                true
-            );
-        }
-
         try {
             return new MoneyPositiveOrZero(
                 $this->parserDecimal->parse($data, new Currency('RUB'))->getAmount(),

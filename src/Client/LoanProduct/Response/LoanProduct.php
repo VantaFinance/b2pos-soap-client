@@ -9,18 +9,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class LoanProduct
 {
-    /**
-     * @var numeric-string
-     */
-    #[SerializedPath('[ns1:id]')]
-    public readonly string $id;
-
-    /**
-     * @var non-empty-string
-     */
-    #[SerializedPath('[ns1:value]')]
-    public readonly string $name;
-
     #[SerializedPath('[ns1:amountFrom]')]
     public readonly MoneyPositiveOrZero $paymentAmountFrom;
 
@@ -37,6 +25,18 @@ final class LoanProduct
     public readonly float $loanRate;
 
     /**
+     * @var numeric-string|null
+     */
+    #[SerializedPath('[ns1:id]')]
+    public readonly ?string $id;
+
+    /**
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:value]')]
+    public readonly ?string $name;
+
+    /**
      * @var positive-int|null
      */
     #[SerializedPath('[ns1:termFrom]')]
@@ -49,29 +49,29 @@ final class LoanProduct
     public readonly ?int $periodToInMonths;
 
     /**
-     * @param numeric-string    $id
-     * @param non-empty-string  $name
-     * @param positive-int|null $periodFromInMonths
-     * @param positive-int|null $periodToInMonths
+     * @param numeric-string|null   $id
+     * @param non-empty-string|null $name
+     * @param positive-int|null     $periodFromInMonths
+     * @param positive-int|null     $periodToInMonths
      */
     public function __construct(
-        string $id,
-        string $name,
         MoneyPositiveOrZero $paymentAmountFrom,
         MoneyPositiveOrZero $paymentAmountTo,
         MoneyPositiveOrZero $firstPaymentAmountFrom,
         MoneyPositiveOrZero $firstPaymentAmountTo,
         float $loanRate,
+        ?string $id = null,
+        ?string $name = null,
         ?int $periodFromInMonths = null,
         ?int $periodToInMonths = null,
     ) {
-        $this->id                     = $id;
-        $this->name                   = $name;
         $this->paymentAmountFrom      = $paymentAmountFrom;
         $this->paymentAmountTo        = $paymentAmountTo;
         $this->firstPaymentAmountFrom = $firstPaymentAmountFrom;
         $this->firstPaymentAmountTo   = $firstPaymentAmountTo;
         $this->loanRate               = $loanRate;
+        $this->id                     = $id;
+        $this->name                   = $name;
         $this->periodFromInMonths     = $periodFromInMonths;
         $this->periodToInMonths       = $periodToInMonths;
     }

@@ -9,18 +9,6 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class Offer
 {
-    /**
-     * @var numeric-string
-     */
-    #[SerializedPath('[ns1:variantID]')]
-    public readonly string $loanProductId;
-
-    /**
-     * @var non-empty-string
-     */
-    #[SerializedPath('[ns1:product]')]
-    public readonly string $loanProductName;
-
     #[SerializedPath('[ns1:amount]')]
     public readonly MoneyPositiveOrZero $paymentAmount;
 
@@ -49,13 +37,23 @@ final class Offer
     public readonly float $discount;
 
     /**
-     * @param numeric-string   $loanProductId
-     * @param non-empty-string $loanProductName
-     * @param positive-int     $periodToInMonths
+     * @var numeric-string|null
+     */
+    #[SerializedPath('[ns1:variantID]')]
+    public readonly ?string $loanProductId;
+
+    /**
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:product]')]
+    public readonly ?string $loanProductName;
+
+    /**
+     * @param positive-int          $periodToInMonths
+     * @param numeric-string|null   $loanProductId
+     * @param non-empty-string|null $loanProductName
      */
     public function __construct(
-        string $loanProductId,
-        string $loanProductName,
         MoneyPositiveOrZero $paymentAmount,
         int $periodToInMonths,
         MoneyPositiveOrZero $initialPaymentAmount,
@@ -64,9 +62,9 @@ final class Offer
         MoneyPositiveOrZero $otherProductsAmount,
         float $loanRate,
         float $discount,
+        ?string $loanProductId,
+        ?string $loanProductName,
     ) {
-        $this->loanProductId        = $loanProductId;
-        $this->loanProductName      = $loanProductName;
         $this->paymentAmount        = $paymentAmount;
         $this->periodToInMonths     = $periodToInMonths;
         $this->initialPaymentAmount = $initialPaymentAmount;
@@ -75,5 +73,7 @@ final class Offer
         $this->otherProductsAmount  = $otherProductsAmount;
         $this->loanRate             = $loanRate;
         $this->discount             = $discount;
+        $this->loanProductId        = $loanProductId;
+        $this->loanProductName      = $loanProductName;
     }
 }

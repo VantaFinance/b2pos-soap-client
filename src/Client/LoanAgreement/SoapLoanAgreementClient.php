@@ -11,7 +11,7 @@ use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\Response\AuthorizeLoa
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlSerializer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlEncoder;
 use Vanta\Integration\B2posSoapClient\LoanAgreementClient;
 use Yiisoft\Http\Method;
 
@@ -31,7 +31,7 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:AuthOptyRequest]',
-                XmlSerializer::FIELD_NAME_PREFIX           => 'api:',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'api:',
             ],
         );
 

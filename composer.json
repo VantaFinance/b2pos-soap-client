@@ -21,7 +21,8 @@
     "autoload": {
         "psr-4": {
             "Vanta\\Integration\\B2posSoapClient\\": "src/"
-        }
+        },
+        "files": ["src/Infrastructure/function.php"]
     },
     "require": {
         "php": "^8.1",

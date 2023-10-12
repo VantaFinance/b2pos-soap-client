@@ -14,7 +14,7 @@ use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\ChooseLoanProd
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
-use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlSerializer;
+use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\XmlEncoder;
 use Vanta\Integration\B2posSoapClient\LoanProductClient;
 use Yiisoft\Http\Method;
 
@@ -34,7 +34,7 @@ final class SoapLoanProductClient implements LoanProductClient
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[env:Body][ns1:CalculatorBookOptyRequest]',
-                XmlSerializer::FIELD_NAME_PREFIX           => 'ns1:',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'ns1:',
             ],
         );
 
@@ -57,7 +57,6 @@ final class SoapLoanProductClient implements LoanProductClient
             'xml',
             [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[env:Body][ns1:CalculatorBookOptyResponse][ns1:selectedBanks][ns1:selectedBank]',
-                XmlSerializer::DEFAULT_VALUE        => [],
             ],
         );
     }
@@ -69,7 +68,7 @@ final class SoapLoanProductClient implements LoanProductClient
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:AcceptOptyRequest]',
-                XmlSerializer::FIELD_NAME_PREFIX           => 'api:',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'api:',
             ],
         );
 

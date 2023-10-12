@@ -9,37 +9,41 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class Insurance
 {
-    /**
-     * @var non-empty-string
-     */
-    #[SerializedPath('[ns1:name]')]
-    public readonly string $name;
-
     #[SerializedPath('[ns1:amount]')]
     public readonly MoneyPositiveOrZero $amount;
 
-    #[SerializedPath('[ns1:contract]')]
-    public readonly string $documentNumber;
+    /**v
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:name]')]
+    public readonly ?string $name;
 
     /**
-     * @var non-empty-string
+     * @var non-empty-string|null
      */
     #[SerializedPath('[ns1:product]')]
-    public readonly string $productName;
+    public readonly ?string $productName;
 
     /**
-     * @param non-empty-string $name
-     * @param non-empty-string $productName
+     * @var non-empty-string|null
+     */
+    #[SerializedPath('[ns1:contract]')]
+    public readonly ?string $documentNumber;
+
+    /**
+     * @param non-empty-string|null $name
+     * @param non-empty-string|null $productName
+     * @param non-empty-string|null $documentNumber
      */
     public function __construct(
-        string $name,
         MoneyPositiveOrZero $amount,
-        string $documentNumber,
-        string $productName,
+        ?string $name,
+        ?string $productName,
+        ?string $documentNumber,
     ) {
-        $this->name           = $name;
         $this->amount         = $amount;
-        $this->documentNumber = $documentNumber;
+        $this->name           = $name;
         $this->productName    = $productName;
+        $this->documentNumber = $documentNumber;
     }
 }
