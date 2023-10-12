@@ -83,7 +83,7 @@ final class ResponseContentErrorMiddleware implements Middleware
         $errorDescription = null;
 
         // ошибки всегда с 'ns1:', даже если в других полях 'api:'
-        $errorDescriptionPropertyPath = $checkErrorPath . '[ns1:description][ns1:description]';
+        $errorDescriptionPropertyPath = $checkErrorPath . '[ns1:error][ns1:description]';
 
         if ($this->propertyAccessor->isReadable($data, $errorDescriptionPropertyPath)) {
             /** @var string|null $errorDescription */
