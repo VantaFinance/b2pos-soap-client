@@ -11,6 +11,8 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
 
+use function Vanta\Integration\arrayRemoveValueByDynamicKey;
+
 final class ObjectDenormalizer implements Denormalizer
 {
     private readonly Denormalizer $objectNormalizer;
@@ -87,8 +89,15 @@ final class ObjectDenormalizer implements Denormalizer
                 continue;
             }
 
+            // отсеиваем поля без родительского элемента, например, при невалидной структуре ответа
+            $keyItemList = $serializedPathAttribute->getSerializedPath()->getParent()?->getElements() ?? [];
+
+            if (0 == count($keyItemList)) {
+                continue;
+            }
+
             // удаляем некорректные поля
-            unset($data[$serializedPathAttribute->getSerializedPath()->getElement(0)]);
+            $data = arrayRemoveValueByDynamicKey($data, $keyItemList);
         }
 
         return $data;
