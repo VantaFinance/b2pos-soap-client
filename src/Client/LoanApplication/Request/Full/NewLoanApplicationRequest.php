@@ -45,11 +45,8 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:selectedBanks][api:bank]')]
     public readonly array $selectedBanks;
 
-    /**
-     * @var array<int, AdditionalService>
-     */
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:selectedServices][api:service][api:id]')]
-    public readonly array $selectedAdditionalServices;
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:firstPayment]')]
+    public readonly MoneyPositiveOrZero $firstPaymentAmount;
 
     /**
      * @var positive-int
@@ -75,9 +72,6 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:surName]')]
     public readonly string $secondname;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:nameChanged]')]
-    public readonly bool $lastNameChanged;
-
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:sex]')]
     public readonly Gender $gender;
 
@@ -102,13 +96,10 @@ final class NewLoanApplicationRequest
     public readonly FamilyStatus $familyStatus;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:childrens]')]
-    public readonly ChildrenCount $children;
+    public readonly ChildrenCount $childrenCount;
 
-    /**
-     * @var int<0, 6>
-     */
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:dependents]')]
-    public readonly int $dependents;
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:docSerial]')]
+    public readonly RussianPassportSeries $passportSeries;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:docNumber]')]
     public readonly RussianPassportNumber $passportNumber;
@@ -130,9 +121,6 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:docCode]')]
     public readonly DivisionCode $passportDivisionCode;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:docSerial]')]
-    public readonly RussianPassportSeries $passportSeries;
-
     #[Context(context: [PhoneNumberNormalizer::PHONE_NUMBER_TYPE => PhoneNumberType::MOBILE])]
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:homePhone]')]
     public readonly PhoneNumber $phoneNumberHome;
@@ -144,38 +132,11 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:contactPerson]')]
     public readonly Contact $contact;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:email]')]
-    public readonly Email $email;
-
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:regAddress]')]
     public readonly RegisterAddress $registrationAddress;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:postMatch]')]
     public readonly bool $factualAddressSame;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:pensioner]')]
-    public readonly bool $isPensioner;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:additionalDoc]')]
-    public readonly DocumentType $additionalDocumentType;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isHome]')]
-    public readonly bool $isHome;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isFlat]')]
-    public readonly bool $isFlat;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isVilla]')]
-    public readonly bool $isVilla;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isEstate]')]
-    public readonly bool $isEstate;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isGarage]')]
-    public readonly bool $isGarage;
-
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isVehicle]')]
-    public readonly bool $isVehicle;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:priceMonth]')]
     public readonly MoneyPositiveOrZero $monthIncome;
@@ -216,20 +177,50 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:goodsProperty][api:good]')]
     public readonly array $basketProducts;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:photo]')]
-    public readonly Base64 $clientPhoto;
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isHome]')]
+    public readonly ?bool $isHome;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:calculatorType]')]
-    public readonly LoanType $loanType;
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isFlat]')]
+    public readonly ?bool $isFlat;
 
-    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:firstPayment]')]
-    public readonly ?MoneyPositiveOrZero $firstPaymentAmount;
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isVilla]')]
+    public readonly ?bool $isVilla;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isEstate]')]
+    public readonly ?bool $isEstate;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isGarage]')]
+    public readonly ?bool $isGarage;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:isVehicle]')]
+    public readonly ?bool $isVehicle;
 
     /**
      * @var non-empty-string|null
      */
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:nameChangedOld]')]
     public readonly ?string $oldLastName;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:nameChanged]')]
+    public readonly ?bool $lastNameChanged;
+
+    /**
+     * @var int<0, 6>|null
+     */
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:dependents]')]
+    public readonly ?int $dependentCount;
+
+    /**
+     * @var array<int, AdditionalService>
+     */
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:selectedServices][api:service][api:id]')]
+    public readonly array $selectedAdditionalServices;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:photo]')]
+    public readonly ?Base64 $clientPhoto;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:calculatorType]')]
+    public readonly ?LoanType $loanType;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:spouce]')]
     public readonly ?Spouce $spouce;
@@ -238,8 +229,14 @@ final class NewLoanApplicationRequest
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:workPhone]')]
     public readonly ?PhoneNumber $phoneNumberWork;
 
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:email]')]
+    public readonly ?Email $email;
+
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:postAddress]')]
     public readonly ?FactualAddress $factualAddress;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:pensioner]')]
+    public readonly ?bool $isPensioner;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:workType]')]
     public readonly ?OrganizationalLegalForm $workOrganizationalLegalForm;
@@ -273,6 +270,9 @@ final class NewLoanApplicationRequest
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:workAddress]')]
     public readonly ?WorkAddress $workAddress;
+
+    #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:additionalDoc]')]
+    public readonly ?DocumentType $additionalDocumentType;
 
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:additionalDocName]')]
     public readonly ?string $documentDetails;
@@ -314,12 +314,12 @@ final class NewLoanApplicationRequest
      * @param non-empty-string                    $firstname
      * @param non-empty-string                    $secondname
      * @param non-empty-string                    $birthPlace
-     * @param int<0, 6>                           $dependents
      * @param non-empty-string                    $passportIssuedBy
      * @param non-empty-string                    $codeWord
      * @param non-empty-array<int, BasketProduct> $basketProducts
-     * @param array<int, AdditionalService>       $selectedAdditionalServices
      * @param non-empty-string|null               $oldLastName
+     * @param int<0, 6>|null                      $dependentCount
+     * @param array<int, AdditionalService>       $selectedAdditionalServices
      * @param non-empty-string|null               $workName
      * @param non-empty-string|null               $documentDetails
      * @param non-empty-string|null               $orderIdInShop
@@ -328,6 +328,7 @@ final class NewLoanApplicationRequest
      */
     public function __construct(
         array $selectedBanks,
+        MoneyPositiveOrZero $firstPaymentAmount,
         int $loanPeriodInMonths,
         string $lastname,
         string $firstname,
@@ -337,8 +338,7 @@ final class NewLoanApplicationRequest
         DateTimeImmutable $birthAt,
         Education $education,
         FamilyStatus $familyStatus,
-        ChildrenCount $children,
-        int $dependents,
+        ChildrenCount $childrenCount,
         RussianPassportSeries $passportSeries,
         RussianPassportNumber $passportNumber,
         string $passportIssuedBy,
@@ -347,25 +347,24 @@ final class NewLoanApplicationRequest
         PhoneNumber $phoneNumberHome,
         PhoneNumber $phoneNumberMobile,
         Contact $contact,
-        Email $email,
         RegisterAddress $registrationAddress,
-        bool $isPensioner,
-        DocumentType $additionalDocumentType,
-        RealPropertyType $realPropertyType,
         MoneyPositiveOrZero $monthIncome,
         MoneyPositiveOrZero $additionalIncome,
         MoneyPositiveOrZero $familyMonthIncome,
         IncomeType $incomeType,
         string $codeWord,
         array $basketProducts,
-        Base64 $clientPhoto,
-        LoanType $loanType,
-        array $selectedAdditionalServices = [],
-        ?MoneyPositiveOrZero $firstPaymentAmount = null,
+        ?RealPropertyType $realPropertyType = null,
         ?string $oldLastName = null,
+        ?int $dependentCount = null,
+        array $selectedAdditionalServices = [],
+        ?Base64 $clientPhoto = null,
+        ?LoanType $loanType = null,
         ?Spouce $spouce = null,
         ?PhoneNumber $phoneNumberWork = null,
+        ?Email $email = null,
         ?FactualAddress $factualAddress = null,
+        ?bool $isPensioner = null,
         ?OrganizationalLegalForm $workOrganizationalLegalForm = null,
         ?string $workName = null,
         ?Industry $workIndustry = null,
@@ -377,6 +376,7 @@ final class NewLoanApplicationRequest
         ?ExperienceInWorkField $experienceInWorkField = null,
         ?ExperienceInEnterprise $experienceInEnterprise = null,
         ?WorkAddress $workAddress = null,
+        ?DocumentType $additionalDocumentType = null,
         ?string $documentDetails = null,
         ?Vehicle $vehicle = null,
         ?Base64 $passportMainPage = null,
@@ -386,57 +386,65 @@ final class NewLoanApplicationRequest
         ?DeliveryType $deliveryType = null,
         ?string $previousLoanApplicationId = null,
     ) {
-        $this->selectedBanks               = $selectedBanks;
-        $this->loanPeriodInMonths          = $loanPeriodInMonths;
-        $this->lastname                    = $lastname;
-        $this->firstname                   = $firstname;
-        $this->secondname                  = $secondname;
+        $this->selectedBanks        = $selectedBanks;
+        $this->firstPaymentAmount   = $firstPaymentAmount;
+        $this->loanPeriodInMonths   = $loanPeriodInMonths;
+        $this->lastname             = $lastname;
+        $this->firstname            = $firstname;
+        $this->secondname           = $secondname;
+        $this->gender               = $gender;
+        $this->birthPlace           = $birthPlace;
+        $this->birthAt              = $birthAt;
+        $this->education            = $education;
+        $this->familyStatus         = $familyStatus;
+        $this->childrenCount        = $childrenCount;
+        $this->passportSeries       = $passportSeries;
+        $this->passportNumber       = $passportNumber;
+        $this->passportIssuedBy     = $passportIssuedBy;
+        $this->passportIssuedAt     = $passportIssuedAt;
+        $this->passportDivisionCode = $passportDivisionCode;
+        $this->phoneNumberHome      = $phoneNumberHome;
+        $this->phoneNumberMobile    = $phoneNumberMobile;
+        $this->contact              = $contact;
+        $this->registrationAddress  = $registrationAddress;
+        $this->factualAddressSame   = null === $factualAddress || $registrationAddress->isEqual($factualAddress);
+        $this->monthIncome          = $monthIncome;
+        $this->additionalIncome     = $additionalIncome;
+        $this->familyMonthIncome    = $familyMonthIncome;
+        $this->isSalary             = IncomeType::SALARY == $incomeType;
+        $this->isBusiness           = IncomeType::BUSINESS == $incomeType;
+        $this->isRent               = IncomeType::RENT == $incomeType;
+        $this->isStudent            = IncomeType::STUDENT == $incomeType;
+        $this->isPension            = IncomeType::PENSION == $incomeType;
+        $this->isOtherIncome        = IncomeType::OTHER == $incomeType;
+        $this->codeWord             = $codeWord;
+        $this->basketProducts       = $basketProducts;
+        if (null !== $realPropertyType) {
+            $this->isHome    = RealPropertyType::HOME->value == $realPropertyType->value;
+            $this->isFlat    = RealPropertyType::FLAT->value == $realPropertyType->value;
+            $this->isVilla   = RealPropertyType::VILLA->value == $realPropertyType->value;
+            $this->isEstate  = RealPropertyType::ESTATE->value == $realPropertyType->value;
+            $this->isGarage  = RealPropertyType::GARAGE->value == $realPropertyType->value;
+            $this->isVehicle = RealPropertyType::VEHICLE->value == $realPropertyType->value;
+        } else {
+            $this->isHome    = null;
+            $this->isFlat    = null;
+            $this->isVilla   = null;
+            $this->isEstate  = null;
+            $this->isGarage  = null;
+            $this->isVehicle = null;
+        }
+        $this->oldLastName                 = $oldLastName;
         $this->lastNameChanged             = null !== $oldLastName && $lastname !== $oldLastName;
-        $this->gender                      = $gender;
-        $this->birthPlace                  = $birthPlace;
-        $this->birthAt                     = $birthAt;
-        $this->education                   = $education;
-        $this->familyStatus                = $familyStatus;
-        $this->children                    = $children;
-        $this->dependents                  = $dependents;
-        $this->passportSeries              = $passportSeries;
-        $this->passportNumber              = $passportNumber;
-        $this->passportIssuedBy            = $passportIssuedBy;
-        $this->passportIssuedAt            = $passportIssuedAt;
-        $this->passportDivisionCode        = $passportDivisionCode;
-        $this->phoneNumberHome             = $phoneNumberHome;
-        $this->phoneNumberMobile           = $phoneNumberMobile;
-        $this->contact                     = $contact;
-        $this->email                       = $email;
-        $this->registrationAddress         = $registrationAddress;
-        $this->factualAddressSame          = null === $factualAddress || $registrationAddress->isEqual($factualAddress);
-        $this->isPensioner                 = $isPensioner;
-        $this->additionalDocumentType      = $additionalDocumentType;
-        $this->isHome                      = RealPropertyType::HOME->value == $realPropertyType->value;
-        $this->isFlat                      = RealPropertyType::FLAT->value == $realPropertyType->value;
-        $this->isVilla                     = RealPropertyType::VILLA->value == $realPropertyType->value;
-        $this->isEstate                    = RealPropertyType::ESTATE->value == $realPropertyType->value;
-        $this->isGarage                    = RealPropertyType::GARAGE->value == $realPropertyType->value;
-        $this->isVehicle                   = RealPropertyType::VEHICLE->value == $realPropertyType->value;
-        $this->monthIncome                 = $monthIncome;
-        $this->additionalIncome            = $additionalIncome;
-        $this->familyMonthIncome           = $familyMonthIncome;
-        $this->isSalary                    = IncomeType::SALARY == $incomeType;
-        $this->isBusiness                  = IncomeType::BUSINESS == $incomeType;
-        $this->isRent                      = IncomeType::RENT == $incomeType;
-        $this->isStudent                   = IncomeType::STUDENT == $incomeType;
-        $this->isPension                   = IncomeType::PENSION == $incomeType;
-        $this->isOtherIncome               = IncomeType::OTHER == $incomeType;
-        $this->codeWord                    = $codeWord;
-        $this->basketProducts              = $basketProducts;
+        $this->dependentCount              = $dependentCount;
+        $this->selectedAdditionalServices  = $selectedAdditionalServices;
         $this->clientPhoto                 = $clientPhoto;
         $this->loanType                    = $loanType;
-        $this->selectedAdditionalServices  = $selectedAdditionalServices;
-        $this->firstPaymentAmount          = $firstPaymentAmount;
-        $this->oldLastName                 = $oldLastName;
         $this->spouce                      = $spouce;
         $this->phoneNumberWork             = $phoneNumberWork;
+        $this->email                       = $email;
         $this->factualAddress              = $factualAddress;
+        $this->isPensioner                 = $isPensioner;
         $this->workOrganizationalLegalForm = $workOrganizationalLegalForm;
         $this->workName                    = $workName;
         $this->workIndustry                = $workIndustry;
@@ -448,6 +456,7 @@ final class NewLoanApplicationRequest
         $this->experienceInWorkField       = $experienceInWorkField;
         $this->experienceInEnterprise      = $experienceInEnterprise;
         $this->workAddress                 = $workAddress;
+        $this->additionalDocumentType      = $additionalDocumentType;
         $this->documentDetails             = $documentDetails;
         $this->vehicle                     = $vehicle;
         $this->passportMainPage            = $passportMainPage;

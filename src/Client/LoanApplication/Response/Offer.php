@@ -56,14 +56,14 @@ final class Offer
     public function __construct(
         MoneyPositiveOrZero $paymentAmount,
         float $loanRate,
-        ?int $periodToInMonths,
-        ?MoneyPositiveOrZero $initialPaymentAmount,
-        ?MoneyPositiveOrZero $paymentAmountInMonth,
-        ?MoneyPositiveOrZero $insuranceAmount,
-        ?MoneyPositiveOrZero $otherProductsAmount,
-        ?float $discount,
-        ?string $loanProductId,
-        ?string $loanProductName,
+        ?int $periodToInMonths = null,
+        ?MoneyPositiveOrZero $initialPaymentAmount = null,
+        ?MoneyPositiveOrZero $paymentAmountInMonth = null,
+        ?MoneyPositiveOrZero $insuranceAmount = null,
+        ?MoneyPositiveOrZero $otherProductsAmount = null,
+        ?float $discount = null,
+        ?string $loanProductId = null,
+        ?string $loanProductName = null,
     ) {
         $this->paymentAmount        = $paymentAmount;
         $this->loanRate             = $loanRate;

@@ -39,7 +39,7 @@ final class Insurance
         MoneyPositiveOrZero $amount,
         string $name,
         string $productName,
-        ?string $documentNumber,
+        ?string $documentNumber = null,
     ) {
         $this->amount         = $amount;
         $this->name           = $name;
