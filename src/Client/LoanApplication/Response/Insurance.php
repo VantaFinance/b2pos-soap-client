@@ -13,16 +13,16 @@ final class Insurance
     public readonly MoneyPositiveOrZero $amount;
 
     /**v
-     * @var non-empty-string|null
+     * @var non-empty-string
      */
     #[SerializedPath('[ns1:name]')]
-    public readonly ?string $name;
+    public readonly string $name;
 
     /**
-     * @var non-empty-string|null
+     * @var non-empty-string
      */
     #[SerializedPath('[ns1:product]')]
-    public readonly ?string $productName;
+    public readonly string $productName;
 
     /**
      * @var non-empty-string|null
@@ -31,14 +31,14 @@ final class Insurance
     public readonly ?string $documentNumber;
 
     /**
-     * @param non-empty-string|null $name
-     * @param non-empty-string|null $productName
+     * @param non-empty-string      $name
+     * @param non-empty-string      $productName
      * @param non-empty-string|null $documentNumber
      */
     public function __construct(
         MoneyPositiveOrZero $amount,
-        ?string $name,
-        ?string $productName,
+        string $name,
+        string $productName,
         ?string $documentNumber,
     ) {
         $this->amount         = $amount;

@@ -9,17 +9,17 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Base64;
 
 final class ChooseLoanProductResponse
 {
+    /**
+     * @var numeric-string
+     */
+    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
+    public readonly string $loanApplicationId;
+
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:success]')]
     public readonly bool $isResultSuccess;
 
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:contract]')]
     public readonly Base64 $loanAgreement;
-
-    /**
-     * @var numeric-string|null
-     */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
-    public readonly ?string $loanApplicationId;
 
     /**
      * @var non-empty-string|null
@@ -37,27 +37,27 @@ final class ChooseLoanProductResponse
      * @var array<int, AdditionalDocument>
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:additionalDocuments][api:document]')]
-    public readonly array $additionalDocument;
+    public readonly array $additionalDocuments;
 
     /**
-     * @param numeric-string|null            $loanApplicationId
+     * @param numeric-string                 $loanApplicationId
      * @param non-empty-string|null          $loanAgreementNumber
      * @param non-empty-string|null          $accountNumber
-     * @param array<int, AdditionalDocument> $additionalDocument
+     * @param array<int, AdditionalDocument> $additionalDocuments
      */
     public function __construct(
+        string $loanApplicationId,
         bool $isResultSuccess,
         Base64 $loanAgreement,
-        ?string $loanApplicationId = null,
         ?string $loanAgreementNumber = null,
         ?string $accountNumber = null,
-        array $additionalDocument = [],
+        array $additionalDocuments = [],
     ) {
+        $this->loanApplicationId   = $loanApplicationId;
         $this->isResultSuccess     = $isResultSuccess;
         $this->loanAgreement       = $loanAgreement;
-        $this->loanApplicationId   = $loanApplicationId;
         $this->loanAgreementNumber = $loanAgreementNumber;
         $this->accountNumber       = $accountNumber;
-        $this->additionalDocument  = $additionalDocument;
+        $this->additionalDocuments = $additionalDocuments;
     }
 }

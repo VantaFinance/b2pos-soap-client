@@ -9,10 +9,10 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 final class GetLoanApplicationStatusResponse
 {
     /**
-     * @var numeric-string|null
+     * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][ns1:StatusOptyResponse][ns1:profileID]')]
-    public readonly ?string $loanApplicationId;
+    public readonly string $loanApplicationId;
 
     /**
      * @var numeric-string|null
@@ -27,12 +27,12 @@ final class GetLoanApplicationStatusResponse
     public readonly array $resultFromBanks;
 
     /**
-     * @param numeric-string|null        $loanApplicationId
+     * @param numeric-string             $loanApplicationId
      * @param numeric-string|null        $employeeCodeInShop
      * @param array<int, ResultFromBank> $resultFromBanks
      */
     public function __construct(
-        ?string $loanApplicationId = null,
+        string $loanApplicationId,
         ?string $employeeCodeInShop = null,
         array $resultFromBanks = [],
     ) {

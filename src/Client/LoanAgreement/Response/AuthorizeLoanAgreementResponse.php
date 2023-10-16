@@ -12,10 +12,10 @@ final class AuthorizeLoanAgreementResponse
     public readonly bool $isResultSuccess;
 
     /**
-     * @var numeric-string|null
+     * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:profileID]')]
-    public readonly ?string $loanApplicationId;
+    public readonly string $loanApplicationId;
 
     // @todo $loanAgreementId? Выяснить после тестирования/появления документации
     /**
@@ -31,13 +31,13 @@ final class AuthorizeLoanAgreementResponse
     public readonly ?string $authorizationCode;
 
     /**
-     * @param numeric-string|null   $loanApplicationId
+     * @param numeric-string        $loanApplicationId
      * @param non-empty-string|null $loanAgreementNumber
      * @param non-empty-string|null $authorizationCode
      */
     public function __construct(
         bool $isResultSuccess,
-        ?string $loanApplicationId,
+        string $loanApplicationId,
         ?string $loanAgreementNumber,
         ?string $authorizationCode,
     ) {
