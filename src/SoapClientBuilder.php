@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerSymfony;
+use Vanta\Integration\B2posSoapClient\Client\Document\SoapDocumentClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\SoapLoanAgreementClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
@@ -244,9 +245,18 @@ final class SoapClientBuilder
         );
     }
 
-    public function createLoanProductClient(): LoanProductClient
+    public function createDocumentClient(): DocumentClient
     {
-        return new SoapLoanProductClient(
+        return new SoapDocumentClient(
+            $this->serializer,
+            new B2PosClient($this->middlewares, $this->client),
+            new B2PosClientConfiguration($this->url),
+        );
+    }
+
+    public function createLoanAgreementClient(): LoanAgreementClient
+    {
+        return new SoapLoanAgreementClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
             new B2PosClientConfiguration($this->url),
@@ -262,9 +272,9 @@ final class SoapClientBuilder
         );
     }
 
-    public function createLoanAgreementClient(): LoanAgreementClient
+    public function createLoanProductClient(): LoanProductClient
     {
-        return new SoapLoanAgreementClient(
+        return new SoapLoanProductClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
             new B2PosClientConfiguration($this->url),
