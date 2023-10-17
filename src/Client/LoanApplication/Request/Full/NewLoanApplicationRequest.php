@@ -305,7 +305,7 @@ final class NewLoanApplicationRequest
      * @var numeric-string|null
      */
     #[SerializedPath('[soapenv:Body][api:CreateOptyRequest][api:oldProfileID]')]
-    public readonly ?string $previousLoanApplicationId;
+    public readonly ?string $previousProfileId;
 
     /**
      * @param non-empty-array<int, SelectedBank>  $selectedBanks
@@ -324,7 +324,7 @@ final class NewLoanApplicationRequest
      * @param non-empty-string|null               $documentDetails
      * @param non-empty-string|null               $orderIdInShop
      * @param numeric-string|null                 $pointOfSaleId
-     * @param numeric-string|null                 $previousLoanApplicationId
+     * @param numeric-string|null                 $previousProfileId
      */
     public function __construct(
         array $selectedBanks,
@@ -384,7 +384,7 @@ final class NewLoanApplicationRequest
         ?string $orderIdInShop = null,
         ?string $pointOfSaleId = null,
         ?DeliveryType $deliveryType = null,
-        ?string $previousLoanApplicationId = null,
+        ?string $previousProfileId = null,
     ) {
         $this->selectedBanks        = $selectedBanks;
         $this->firstPaymentAmount   = $firstPaymentAmount;
@@ -464,6 +464,6 @@ final class NewLoanApplicationRequest
         $this->orderIdInShop               = $orderIdInShop;
         $this->pointOfSaleId               = $pointOfSaleId;
         $this->deliveryType                = $deliveryType;
-        $this->previousLoanApplicationId   = $previousLoanApplicationId;
+        $this->previousProfileId           = $previousProfileId;
     }
 }

@@ -26,10 +26,10 @@ interface LoanApplicationClient
     public function newLoanApplicationFull(NewLoanApplicationRequestFull $request): string;
 
     /**
-     * @param  numeric-string  $loanApplicationId
+     * @param  numeric-string  $profileId
      * @throws ClientException
      */
-    public function getLoanApplicationStatus(string $loanApplicationId): GetLoanApplicationStatusResponse;
+    public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse;
 
     /**
      * @throws ClientException

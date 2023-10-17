@@ -12,7 +12,7 @@ final class GetDocumentsCheckResultRequest
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:CheckScansOptyRequest][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     /**
      * @var numeric-string
@@ -21,14 +21,14 @@ final class GetDocumentsCheckResultRequest
     public readonly string $bankId;
 
     /**
-     * @param numeric-string $loanApplicationId
+     * @param numeric-string $profileId
      * @param numeric-string $bankId
      */
     public function __construct(
-        string $loanApplicationId,
+        string $profileId,
         string $bankId,
     ) {
-        $this->loanApplicationId = $loanApplicationId;
-        $this->bankId            = $bankId;
+        $this->profileId = $profileId;
+        $this->bankId    = $bankId;
     }
 }

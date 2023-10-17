@@ -15,7 +15,7 @@ final class AuthorizeLoanAgreementResponse
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     // @todo $loanAgreementId? Выяснить после тестирования/появления документации
     /**
@@ -31,18 +31,18 @@ final class AuthorizeLoanAgreementResponse
     public readonly ?string $authorizationCode;
 
     /**
-     * @param numeric-string        $loanApplicationId
+     * @param numeric-string        $profileId
      * @param non-empty-string|null $loanAgreementNumber
      * @param non-empty-string|null $authorizationCode
      */
     public function __construct(
         bool $isResultSuccess,
-        string $loanApplicationId,
+        string $profileId,
         ?string $loanAgreementNumber,
         ?string $authorizationCode,
     ) {
         $this->isResultSuccess     = $isResultSuccess;
-        $this->loanApplicationId   = $loanApplicationId;
+        $this->profileId           = $profileId;
         $this->loanAgreementNumber = $loanAgreementNumber;
         $this->authorizationCode   = $authorizationCode;
     }

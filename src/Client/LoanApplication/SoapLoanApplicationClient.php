@@ -99,10 +99,10 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         );
     }
 
-    public function getLoanApplicationStatus(string $loanApplicationId): GetLoanApplicationStatusResponse
+    public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse
     {
         $requestContent = $this->serializer->serialize(
-            new GetLoanApplicationStatusRequest($loanApplicationId),
+            new GetLoanApplicationStatusRequest($profileId),
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:StatusOptyRequest]',

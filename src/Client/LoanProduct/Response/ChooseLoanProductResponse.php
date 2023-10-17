@@ -13,7 +13,7 @@ final class ChooseLoanProductResponse
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:success]')]
     public readonly bool $isResultSuccess;
@@ -40,20 +40,20 @@ final class ChooseLoanProductResponse
     public readonly array $additionalDocuments;
 
     /**
-     * @param numeric-string                 $loanApplicationId
+     * @param numeric-string                 $profileId
      * @param non-empty-string|null          $loanAgreementNumber
      * @param non-empty-string|null          $accountNumber
      * @param array<int, AdditionalDocument> $additionalDocuments
      */
     public function __construct(
-        string $loanApplicationId,
+        string $profileId,
         bool $isResultSuccess,
         Base64 $loanAgreement,
         ?string $loanAgreementNumber = null,
         ?string $accountNumber = null,
         array $additionalDocuments = [],
     ) {
-        $this->loanApplicationId   = $loanApplicationId;
+        $this->profileId           = $profileId;
         $this->isResultSuccess     = $isResultSuccess;
         $this->loanAgreement       = $loanAgreement;
         $this->loanAgreementNumber = $loanAgreementNumber;

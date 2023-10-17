@@ -13,7 +13,7 @@ final class GetDocumentsCheckResultResponse
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][ns1:CheckScansOptyResponse][ns1:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     #[SerializedPath('[soapenv:Body][ns1:CheckScansOptyResponse][ns1:result]')]
     public readonly LoanApplicationBankCheckStatus $checkStatus;
@@ -25,15 +25,15 @@ final class GetDocumentsCheckResultResponse
     public readonly array $documentCheckStatuses;
 
     /**
-     * @param numeric-string                  $loanApplicationId
+     * @param numeric-string                  $profileId
      * @param array<int, DocumentCheckStatus> $documentCheckStatuses
      */
     public function __construct(
-        string $loanApplicationId,
+        string $profileId,
         LoanApplicationBankCheckStatus $checkStatus,
         array $documentCheckStatuses = [],
     ) {
-        $this->loanApplicationId     = $loanApplicationId;
+        $this->profileId             = $profileId;
         $this->checkStatus           = $checkStatus;
         $this->documentCheckStatuses = $documentCheckStatuses;
     }

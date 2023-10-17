@@ -12,7 +12,7 @@ final class GetLoanApplicationStatusResponse
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][ns1:StatusOptyResponse][ns1:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     /**
      * @var numeric-string|null
@@ -27,16 +27,16 @@ final class GetLoanApplicationStatusResponse
     public readonly array $resultFromBanks;
 
     /**
-     * @param numeric-string             $loanApplicationId
+     * @param numeric-string             $profileId
      * @param numeric-string|null        $employeeCodeInShop
      * @param array<int, ResultFromBank> $resultFromBanks
      */
     public function __construct(
-        string $loanApplicationId,
+        string $profileId,
         ?string $employeeCodeInShop = null,
         array $resultFromBanks = [],
     ) {
-        $this->loanApplicationId  = $loanApplicationId;
+        $this->profileId          = $profileId;
         $this->employeeCodeInShop = $employeeCodeInShop;
         $this->resultFromBanks    = $resultFromBanks;
     }

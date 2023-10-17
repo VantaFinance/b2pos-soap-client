@@ -12,17 +12,17 @@ final class CancelLoanApplicationResponse
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][ns1:CancelOptyResponse][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     #[SerializedPath('[soapenv:Body][api:CancelOptyResponse][api:success]')]
     public readonly bool $isResultSuccess;
 
     /**
-     * @param numeric-string $loanApplicationId
+     * @param numeric-string $profileId
      */
-    public function __construct(string $loanApplicationId, bool $isResultSuccess)
+    public function __construct(string $profileId, bool $isResultSuccess)
     {
-        $this->loanApplicationId = $loanApplicationId;
-        $this->isResultSuccess   = $isResultSuccess;
+        $this->profileId       = $profileId;
+        $this->isResultSuccess = $isResultSuccess;
     }
 }
