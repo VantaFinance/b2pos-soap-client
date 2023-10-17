@@ -7,9 +7,11 @@ namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\CancelLoanApplicationRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\NewLoanApplicationRequest as NewLoanApplicationRequestFull;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\GetLoanApplicationStatusRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Short\NewLoanApplicationRequest as NewLoanApplicationRequestShort;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\CancelLoanApplicationResponse;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\GetLoanApplicationStatusResponse;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
@@ -97,10 +99,10 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         );
     }
 
-    public function getLoanApplicationStatus(string $profileId): GetLoanApplicationStatusResponse
+    public function getLoanApplicationStatus(string $loanApplicationId): GetLoanApplicationStatusResponse
     {
         $requestContent = $this->serializer->serialize(
-            new GetLoanApplicationStatusRequest($profileId),
+            new GetLoanApplicationStatusRequest($loanApplicationId),
             'xml',
             [
                 RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:StatusOptyRequest]',
@@ -124,6 +126,37 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
         return $this->serializer->deserialize(
             $responseContent,
             GetLoanApplicationStatusResponse::class,
+            'xml',
+        );
+    }
+
+    public function cancelLoanApplicationFull(CancelLoanApplicationRequest $request): CancelLoanApplicationResponse
+    {
+        $requestContent = $this->serializer->serialize(
+            $request,
+            'xml',
+            [
+                RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:CancelOptyRequest]',
+                XmlEncoder::FIELD_NAME_PREFIX              => 'api:',
+            ],
+        );
+
+        $requestPsr = new Request(
+            Method::POST,
+            '/loan/',
+            [],
+            $requestContent,
+        );
+
+        $responsePsr = $this->client->sendRequest(
+            $requestPsr,
+            $this->clientConfiguration->withCheckErrorPath('[soapenv:Body][ns1:CancelOptyResponse]'),
+        );
+        $responseContent = $responsePsr->getBody()->__toString();
+
+        return $this->serializer->deserialize(
+            $responseContent,
+            CancelLoanApplicationResponse::class,
             'xml',
         );
     }
