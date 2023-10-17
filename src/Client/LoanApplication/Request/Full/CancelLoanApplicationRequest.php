@@ -17,7 +17,7 @@ final class CancelLoanApplicationRequest
     /**
      * @var numeric-string
      */
-    #[SerializedPath('[soapenv:Body][api:AuthOptyRequest][api:acceptBank]')]
+    #[SerializedPath('[soapenv:Body][api:CancelOptyRequest][api:acceptBank]')]
     public readonly string $bankId;
 
     /**
