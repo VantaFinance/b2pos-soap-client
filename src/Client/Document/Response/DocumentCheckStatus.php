@@ -12,16 +12,16 @@ final class DocumentCheckStatus
     /**
      * @var non-empty-string
      */
-    #[SerializedPath('[api:fileType]')]
+    #[SerializedPath('[ns1:fileType]')]
     public readonly string $fileType;
 
-    #[SerializedPath('[api:response]')]
+    #[SerializedPath('[ns1:response]')]
     public readonly DocumentCheckStatusEnum $checkStatus;
 
     /**
      * @var non-empty-string|null
      */
-    #[SerializedPath('[api:reason]')]
+    #[SerializedPath('[ns1:reason]')]
     public readonly ?string $errorReason;
 
     /**
