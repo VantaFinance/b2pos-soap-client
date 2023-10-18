@@ -36,9 +36,6 @@ final class LoanProduct
     #[SerializedPath('[ns1:amountFrom]')]
     public readonly MoneyPositiveOrZero $paymentAmountFrom;
 
-    #[SerializedPath('[ns1:amountTo]')]
-    public readonly MoneyPositiveOrZero $paymentAmountTo;
-
     #[SerializedPath('[ns1:firstPaymentFrom]')]
     public readonly MoneyPositiveOrZero $firstPaymentAmountFrom;
 
@@ -47,6 +44,9 @@ final class LoanProduct
 
     #[SerializedPath('[ns1:creditRate]')]
     public readonly float $loanRate;
+
+    #[SerializedPath('[ns1:amountTo]')]
+    public readonly ?MoneyPositiveOrZero $paymentAmountTo;
 
     /**
      * @param numeric-string   $id
@@ -60,19 +60,19 @@ final class LoanProduct
         int $periodFromInMonths,
         int $periodToInMonths,
         MoneyPositiveOrZero $paymentAmountFrom,
-        MoneyPositiveOrZero $paymentAmountTo,
         MoneyPositiveOrZero $firstPaymentAmountFrom,
         MoneyPositiveOrZero $firstPaymentAmountTo,
         float $loanRate,
+        MoneyPositiveOrZero $paymentAmountTo,
     ) {
         $this->id                     = $id;
         $this->name                   = $name;
         $this->periodFromInMonths     = $periodFromInMonths;
         $this->periodToInMonths       = $periodToInMonths;
         $this->paymentAmountFrom      = $paymentAmountFrom;
-        $this->paymentAmountTo        = $paymentAmountTo;
         $this->firstPaymentAmountFrom = $firstPaymentAmountFrom;
         $this->firstPaymentAmountTo   = $firstPaymentAmountTo;
         $this->loanRate               = $loanRate;
+        $this->paymentAmountTo        = $paymentAmountTo;
     }
 }

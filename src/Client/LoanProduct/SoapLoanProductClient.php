@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request\ChooseLoanProductRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Request\GetAvailableLoanProductsRequest;
-use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\Bank;
+use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\BankResult;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response\ChooseLoanProductResponse;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
@@ -53,7 +53,7 @@ final class SoapLoanProductClient implements LoanProductClient
 
         return $this->serializer->deserialize(
             $responseContent,
-            Bank::class . '[]',
+            BankResult::class . '[]',
             'xml',
             [
                 UnwrappingDenormalizer::UNWRAP_PATH => '[env:Body][ns1:CalculatorBookOptyResponse][ns1:selectedBanks][ns1:selectedBank]',

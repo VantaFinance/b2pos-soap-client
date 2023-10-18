@@ -6,7 +6,7 @@ namespace Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
-final class Bank
+final class BankResult
 {
     /**
      * @var numeric-string
