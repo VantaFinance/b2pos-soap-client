@@ -8,26 +8,26 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 
 final class AuthorizeLoanAgreementResponse
 {
-    #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:success]')]
-    public readonly bool $isResultSuccess;
-
     /**
      * @var numeric-string
      */
-    #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:profileID]')]
+    #[SerializedPath('[soapenv:Body][ns1:AuthOptyResponse][ns1:profileID]')]
     public readonly string $profileId;
+
+    #[SerializedPath('[soapenv:Body][ns1:AuthOptyResponse][ns1:success]')]
+    public readonly bool $isResultSuccess;
 
     // @todo $loanAgreementId? Выяснить после тестирования/появления документации
     /**
      * @var non-empty-string|null
      */
-    #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:agreementNumber]')]
+    #[SerializedPath('[soapenv:Body][ns1:AuthOptyResponse][ns1:agreementNumber]')]
     public readonly ?string $loanAgreementNumber;
 
     /**
      * @var non-empty-string|null
      */
-    #[SerializedPath('[soapenv:Body][api:AuthOptyResponse][api:authCode]')]
+    #[SerializedPath('[soapenv:Body][ns1:AuthOptyResponse][ns1:authCode]')]
     public readonly ?string $authorizationCode;
 
     /**
@@ -36,13 +36,13 @@ final class AuthorizeLoanAgreementResponse
      * @param non-empty-string|null $authorizationCode
      */
     public function __construct(
-        bool $isResultSuccess,
         string $profileId,
+        bool $isResultSuccess,
         ?string $loanAgreementNumber,
         ?string $authorizationCode,
     ) {
-        $this->isResultSuccess     = $isResultSuccess;
         $this->profileId           = $profileId;
+        $this->isResultSuccess     = $isResultSuccess;
         $this->loanAgreementNumber = $loanAgreementNumber;
         $this->authorizationCode   = $authorizationCode;
     }
