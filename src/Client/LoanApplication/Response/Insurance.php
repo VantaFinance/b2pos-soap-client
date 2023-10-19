@@ -9,14 +9,14 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class Insurance
 {
-    #[SerializedPath('[ns1:amount]')]
-    public readonly MoneyPositiveOrZero $amount;
-
     /**v
      * @var non-empty-string
      */
     #[SerializedPath('[ns1:name]')]
     public readonly string $name;
+
+    #[SerializedPath('[ns1:amount]')]
+    public readonly MoneyPositiveOrZero $amount;
 
     /**
      * @var non-empty-string
@@ -36,13 +36,13 @@ final class Insurance
      * @param non-empty-string|null $documentNumber
      */
     public function __construct(
-        MoneyPositiveOrZero $amount,
         string $name,
+        MoneyPositiveOrZero $amount,
         string $productName,
         ?string $documentNumber = null,
     ) {
-        $this->amount         = $amount;
         $this->name           = $name;
+        $this->amount         = $amount;
         $this->productName    = $productName;
         $this->documentNumber = $documentNumber;
     }

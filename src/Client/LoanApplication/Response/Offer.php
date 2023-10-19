@@ -9,6 +9,12 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
 final class Offer
 {
+    /**
+     * @var non-empty-string
+     */
+    #[SerializedPath('[ns1:product]')]
+    public readonly string $loanProductName;
+
     #[SerializedPath('[ns1:amount]')]
     public readonly MoneyPositiveOrZero $paymentAmount;
 
@@ -43,17 +49,12 @@ final class Offer
     public readonly ?string $loanProductId;
 
     /**
-     * @var non-empty-string|null
-     */
-    #[SerializedPath('[ns1:product]')]
-    public readonly ?string $loanProductName;
-
-    /**
-     * @param positive-int|null     $periodToInMonths
-     * @param numeric-string|null   $loanProductId
-     * @param non-empty-string|null $loanProductName
+     * @param non-empty-string    $loanProductName
+     * @param positive-int|null   $periodToInMonths
+     * @param numeric-string|null $loanProductId
      */
     public function __construct(
+        string $loanProductName,
         MoneyPositiveOrZero $paymentAmount,
         float $loanRate,
         ?int $periodToInMonths = null,
@@ -63,8 +64,8 @@ final class Offer
         ?MoneyPositiveOrZero $otherProductsAmount = null,
         ?float $discount = null,
         ?string $loanProductId = null,
-        ?string $loanProductName = null,
     ) {
+        $this->loanProductName      = $loanProductName;
         $this->paymentAmount        = $paymentAmount;
         $this->loanRate             = $loanRate;
         $this->periodToInMonths     = $periodToInMonths;
@@ -74,6 +75,5 @@ final class Offer
         $this->otherProductsAmount  = $otherProductsAmount;
         $this->discount             = $discount;
         $this->loanProductId        = $loanProductId;
-        $this->loanProductName      = $loanProductName;
     }
 }
