@@ -10,10 +10,10 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\Base64;
 
 final class AdditionalDocument
 {
-    #[SerializedPath('[api:fileType]')]
+    #[SerializedPath('[ns1:fileType]')]
     public readonly AdditionalDocumentFileType $documentType;
 
-    #[SerializedPath('[api:fileData]')]
+    #[SerializedPath('[ns1:fileData]')]
     public readonly Base64 $documentContent;
 
     public function __construct(

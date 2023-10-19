@@ -12,31 +12,31 @@ final class ChooseLoanProductResponse
     /**
      * @var numeric-string
      */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:profileID]')]
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:profileID]')]
     public readonly string $profileId;
 
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:success]')]
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:success]')]
     public readonly bool $isResultSuccess;
 
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:contract]')]
-    public readonly Base64 $loanAgreement;
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:contract]')]
+    public readonly Base64 $loanAgreementInPdf;
 
     /**
      * @var non-empty-string|null
      */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:agreementNumber]')]
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:agreementNumber]')]
     public readonly ?string $loanAgreementNumber;
 
     /**
      * @var non-empty-string|null
      */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:accountNumber]')]
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:accountNumber]')]
     public readonly ?string $accountNumber;
 
     /**
      * @var array<int, AdditionalDocument>
      */
-    #[SerializedPath('[soapenv:Body][api:AcceptOptyResponse][api:additionalDocuments][api:document]')]
+    #[SerializedPath('[soapenv:Body][ns1:AcceptOptyResponse][ns1:additionalDocuments][ns1:document]')]
     public readonly array $additionalDocuments;
 
     /**
@@ -48,14 +48,14 @@ final class ChooseLoanProductResponse
     public function __construct(
         string $profileId,
         bool $isResultSuccess,
-        Base64 $loanAgreement,
+        Base64 $loanAgreementInPdf,
         ?string $loanAgreementNumber = null,
         ?string $accountNumber = null,
         array $additionalDocuments = [],
     ) {
         $this->profileId           = $profileId;
         $this->isResultSuccess     = $isResultSuccess;
-        $this->loanAgreement       = $loanAgreement;
+        $this->loanAgreementInPdf  = $loanAgreementInPdf;
         $this->loanAgreementNumber = $loanAgreementNumber;
         $this->accountNumber       = $accountNumber;
         $this->additionalDocuments = $additionalDocuments;

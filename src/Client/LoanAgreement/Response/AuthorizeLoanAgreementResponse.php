@@ -17,7 +17,6 @@ final class AuthorizeLoanAgreementResponse
     #[SerializedPath('[soapenv:Body][ns1:AuthOptyResponse][ns1:success]')]
     public readonly bool $isResultSuccess;
 
-    // @todo $loanAgreementId? Выяснить после тестирования/появления документации
     /**
      * @var non-empty-string|null
      */
