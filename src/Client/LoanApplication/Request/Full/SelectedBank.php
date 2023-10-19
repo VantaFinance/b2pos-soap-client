@@ -16,9 +16,6 @@ final class SelectedBank
     #[SerializedPath('[api:id]')]
     public readonly string $id;
 
-    #[SerializedPath('[api:firstPayment]')]
-    public readonly MoneyPositiveOrZero $firstPaymentAmount;
-
     /**
      * @var numeric-string|null
      */
@@ -34,6 +31,9 @@ final class SelectedBank
     #[SerializedPath('[api:type]')]
     public readonly ?LoanType $loanType;
 
+    #[SerializedPath('[api:firstPayment]')]
+    public readonly MoneyPositiveOrZero $firstPaymentAmount;
+
     /**
      * @param numeric-string      $id
      * @param numeric-string|null $productId
@@ -41,15 +41,15 @@ final class SelectedBank
      */
     public function __construct(
         string $id,
-        MoneyPositiveOrZero $firstPaymentAmount,
         ?string $productId = null,
         ?int $loanPeriodInMonths = null,
         ?LoanType $loanType = null,
+        MoneyPositiveOrZero $firstPaymentAmount = new MoneyPositiveOrZero('0'),
     ) {
         $this->id                 = $id;
-        $this->firstPaymentAmount = $firstPaymentAmount;
         $this->productId          = $productId;
         $this->loanPeriodInMonths = $loanPeriodInMonths;
         $this->loanType           = $loanType;
+        $this->firstPaymentAmount = $firstPaymentAmount;
     }
 }

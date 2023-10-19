@@ -18,6 +18,15 @@ final class Offer
     #[SerializedPath('[ns1:amount]')]
     public readonly MoneyPositiveOrZero $paymentAmount;
 
+    #[SerializedPath('[ns1:rate]')]
+    public readonly float $loanRate;
+
+    /**
+     * @var positive-int|null
+     */
+    #[SerializedPath('[ns1:terms]')]
+    public readonly ?int $periodToInMonths;
+
     #[SerializedPath('[ns1:firstPayment]')]
     public readonly MoneyPositiveOrZero $initialPaymentAmount;
 
@@ -29,15 +38,6 @@ final class Offer
 
     #[SerializedPath('[ns1:otherAmount]')]
     public readonly MoneyPositiveOrZero $otherProductsAmount;
-
-    #[SerializedPath('[ns1:rate]')]
-    public readonly float $loanRate;
-
-    /**
-     * @var positive-int|null
-     */
-    #[SerializedPath('[ns1:terms]')]
-    public readonly ?int $periodToInMonths;
 
     #[SerializedPath('[ns1:rebate]')]
     public readonly ?float $discount;
@@ -56,23 +56,23 @@ final class Offer
     public function __construct(
         string $loanProductName,
         MoneyPositiveOrZero $paymentAmount,
-        MoneyPositiveOrZero $initialPaymentAmount,
-        MoneyPositiveOrZero $paymentAmountInMonth,
-        MoneyPositiveOrZero $insuranceAmount,
-        MoneyPositiveOrZero $otherProductsAmount,
         float $loanRate,
         ?int $periodToInMonths = null,
+        MoneyPositiveOrZero $initialPaymentAmount = new MoneyPositiveOrZero('0'),
+        MoneyPositiveOrZero $paymentAmountInMonth = new MoneyPositiveOrZero('0'),
+        MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),
+        MoneyPositiveOrZero $otherProductsAmount = new MoneyPositiveOrZero('0'),
         ?float $discount = null,
         ?string $loanProductId = null,
     ) {
         $this->loanProductName      = $loanProductName;
         $this->paymentAmount        = $paymentAmount;
+        $this->loanRate             = $loanRate;
+        $this->periodToInMonths     = $periodToInMonths;
         $this->initialPaymentAmount = $initialPaymentAmount;
         $this->paymentAmountInMonth = $paymentAmountInMonth;
         $this->insuranceAmount      = $insuranceAmount;
         $this->otherProductsAmount  = $otherProductsAmount;
-        $this->loanRate             = $loanRate;
-        $this->periodToInMonths     = $periodToInMonths;
         $this->discount             = $discount;
         $this->loanProductId        = $loanProductId;
     }
