@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalize
 
 use function Vanta\Integration\arrayRemoveValueByDynamicKey;
 
+use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
+
 final class ObjectDenormalizer implements Denormalizer
 {
     private readonly Denormalizer $objectNormalizer;
@@ -36,9 +38,9 @@ final class ObjectDenormalizer implements Denormalizer
     }
 
     /**
-     * @param array<string, mixed>  $data
-     * @param class-string          $type
-     * @param array<string, string> $context
+     * @param array<int|string, mixed> $data
+     * @param class-string             $type
+     * @param array<string, string>    $context
      */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
@@ -48,6 +50,8 @@ final class ObjectDenormalizer implements Denormalizer
 
         $data = $this->normalizeEmptyArray($data, $type);
 
+        $data = $this->normalizeEmptyMoney($data, $type);
+
         return $this->objectNormalizer->denormalize($data, $type, $format, $context);
     }
 
@@ -56,8 +60,9 @@ final class ObjectDenormalizer implements Denormalizer
      * Проявляется, как минимум, в Vanta\Integration\B2posSoapClient\Client\Reference\Response\SelectedBank::loanProducts,
      * вместо ['ns1:creditProducts']['ns1:creditProduct'] => [], получаем ['ns1:creditProducts'] => ''.
      *
-     * @param array<string, mixed> $data
-     * @param class-string         $type
+     * @param  array<int|string, mixed> $data
+     * @param  class-string             $type
+     * @return array<int|string, mixed> $data
      */
     private function normalizeEmptyArray(mixed $data, string $type): mixed
     {
@@ -98,6 +103,55 @@ final class ObjectDenormalizer implements Denormalizer
 
             // удаляем некорректные поля
             $data = arrayRemoveValueByDynamicKey($data, $keyItemList);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Если тип поля MoneyPositiveOrZero, но поле в ответе отсутствует, или = null, то заменяем его на '0'.
+     *
+     * @param  array<int|string, mixed> $data
+     * @param  class-string             $type
+     * @return array<int|string, mixed>
+     */
+    private function normalizeEmptyMoney(mixed $data, string $type): mixed
+    {
+        $reflectionClass = new ReflectionClass($type);
+
+        $reflectionProperties = $reflectionClass->getProperties();
+
+        foreach ($reflectionProperties as $reflectionProperty) {
+            $serializedPathAttribute = $reflectionProperty->getAttributes(SerializedPath::class);
+
+            // отсеиваем несериализуемые поля
+            if (!array_key_exists(0, $serializedPathAttribute)) {
+                continue;
+            }
+
+            /** @var SerializedPath $serializedPathAttribute */
+            $serializedPathAttribute = $serializedPathAttribute[0]->newInstance();
+
+            /** @var ReflectionNamedType|null $reflectionNamedType */
+            $reflectionNamedType = $reflectionProperty->getType();
+
+            // отсеиваем поля не денег
+            if (MoneyPositiveOrZero::class != $reflectionNamedType?->getName()) {
+                continue;
+            }
+
+            $moneyValue = null;
+            if ($this->propertyAccessor->isReadable($data, $serializedPathAttribute->getSerializedPath())) {
+                $moneyValue = $this->propertyAccessor->getValue($data, $serializedPathAttribute->getSerializedPath());
+            }
+
+            // отсеиваем валидные поля
+            if (is_string($moneyValue)) {
+                continue;
+            }
+
+            // ставим валидное значение пустых денег
+            $this->propertyAccessor->setValue($data, $serializedPathAttribute->getSerializedPath(), '0');
         }
 
         return $data;
