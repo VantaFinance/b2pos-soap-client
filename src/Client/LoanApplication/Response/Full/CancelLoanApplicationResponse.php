@@ -11,10 +11,10 @@ final class CancelLoanApplicationResponse
     /**
      * @var numeric-string
      */
-    #[SerializedPath('[soapenv:Body][ns1:CancelOptyResponse][api:profileID]')]
+    #[SerializedPath('[soapenv:Body][ns1:CancelOptyResponse][ns1:profileID]')]
     public readonly string $profileId;
 
-    #[SerializedPath('[soapenv:Body][api:CancelOptyResponse][api:success]')]
+    #[SerializedPath('[soapenv:Body][ns1:CancelOptyResponse][ns1:success]')]
     public readonly bool $isResultSuccess;
 
     /**
