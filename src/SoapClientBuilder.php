@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerSymfony;
 use Vanta\Integration\B2posSoapClient\Client\Document\SoapDocumentClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\SoapLoanAgreementClient;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Serializer\OfferDenormalizer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
@@ -112,13 +113,16 @@ final class SoapClientBuilder
             propertyTypeExtractor: $typeExtractor,
         );
 
+        $moneyPositiveOrZeroNormalizer = new MoneyPositiveOrZeroNormalizer();
+
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $xmlEncoder       = new XmlEncoder(new XmlEncoderSymfony());
 
         $serializerSymfony = new SerializerSymfony(
             [
+                new OfferDenormalizer($moneyPositiveOrZeroNormalizer),
                 new PhoneNumberNormalizer(),
-                new MoneyPositiveOrZeroNormalizer(),
+                $moneyPositiveOrZeroNormalizer,
                 new RussianPassportDocumentNormalizer(),
                 new CountryIsoNormalizer(),
                 new DivisionCodeNormalizer(),
