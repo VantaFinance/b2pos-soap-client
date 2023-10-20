@@ -118,33 +118,43 @@ final class SoapClientBuilder
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $xmlEncoder       = new XmlEncoder(new XmlEncoderSymfony());
 
-        $serializerSymfony = new SerializerSymfony(
-            [
-                new OfferDenormalizer($moneyPositiveOrZeroNormalizer),
-                new PhoneNumberNormalizer(),
-                $moneyPositiveOrZeroNormalizer,
-                new RussianPassportDocumentNormalizer(),
-                new CountryIsoNormalizer(),
-                new DivisionCodeNormalizer(),
-                new RussianPassportNumberNormalizer(),
-                new RussianPassportSeriesNormalizer(),
-                new EmailNormalizer(),
-                new Base64Normalizer(),
-                new BackedEnumNormalizer(),
-                new DateTimeNormalizer(),
-                new UnwrappingDenormalizer(),
-                new NumericStringDenormalizer(),
-                new ArrayDenormalizer(),
-                new RequestNormalizer(
-                    $objectNormalizer,
-                    $propertyAccessor,
-                ),
-                new ObjectDenormalizer(
-                    $objectNormalizer,
-                    $propertyAccessor,
-                ),
+        $normalizers = [
+            new PhoneNumberNormalizer(),
+            $moneyPositiveOrZeroNormalizer,
+            new RussianPassportDocumentNormalizer(),
+            new CountryIsoNormalizer(),
+            new DivisionCodeNormalizer(),
+            new RussianPassportNumberNormalizer(),
+            new RussianPassportSeriesNormalizer(),
+            new EmailNormalizer(),
+            new Base64Normalizer(),
+            new BackedEnumNormalizer(),
+            new DateTimeNormalizer(),
+            new UnwrappingDenormalizer(),
+            new NumericStringDenormalizer(),
+            new ArrayDenormalizer(),
+            new RequestNormalizer(
                 $objectNormalizer,
+                $propertyAccessor,
+            ),
+            new ObjectDenormalizer(
+                $objectNormalizer,
+                $propertyAccessor,
+            ),
+            $objectNormalizer,
+        ];
+
+        $serializerSymfony = new SerializerSymfony(
+            $normalizers,
+            [
+                $xmlEncoder,
             ],
+        );
+
+        $offerDenormalizer = new OfferDenormalizer($serializerSymfony);
+
+        $serializerSymfony = new SerializerSymfony(
+            array_merge([$offerDenormalizer], $normalizers),
             [
                 $xmlEncoder,
             ],

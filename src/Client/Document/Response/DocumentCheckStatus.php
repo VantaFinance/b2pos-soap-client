@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\Document\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Client\Document\Struct\DocumentCheckStatus as DocumentCheckStatusEnum;
+use Vanta\Integration\B2posSoapClient\Client\Document\Struct\DocumentVerificationStatus;
 
 final class DocumentCheckStatus
 {
@@ -16,7 +16,7 @@ final class DocumentCheckStatus
     public readonly string $fileType;
 
     #[SerializedPath('[ns1:response]')]
-    public readonly DocumentCheckStatusEnum $checkStatus;
+    public readonly DocumentVerificationStatus $checkStatus;
 
     /**
      * @var non-empty-string|null
@@ -30,7 +30,7 @@ final class DocumentCheckStatus
      */
     public function __construct(
         string $fileType,
-        DocumentCheckStatusEnum $checkStatus,
+        DocumentVerificationStatus $checkStatus,
         ?string $errorReason = null,
     ) {
         $this->fileType    = $fileType;

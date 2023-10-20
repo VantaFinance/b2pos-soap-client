@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\B2posSoapClient\Client\Document\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Client\Document\Struct\LoanApplicationBankCheckStatus;
+use Vanta\Integration\B2posSoapClient\Client\Document\Struct\LoanApplicationBankVerificationStatus;
 
 final class GetDocumentsCheckResultResponse
 {
@@ -16,7 +16,7 @@ final class GetDocumentsCheckResultResponse
     public readonly string $profileId;
 
     #[SerializedPath('[soapenv:Body][ns1:CheckScansOptyResponse][ns1:result]')]
-    public readonly LoanApplicationBankCheckStatus $checkStatus;
+    public readonly LoanApplicationBankVerificationStatus $checkStatus;
 
     /**
      * @var array<int, DocumentCheckStatus>
@@ -30,7 +30,7 @@ final class GetDocumentsCheckResultResponse
      */
     public function __construct(
         string $profileId,
-        LoanApplicationBankCheckStatus $checkStatus,
+        LoanApplicationBankVerificationStatus $checkStatus,
         array $documentCheckStatuses = [],
     ) {
         $this->profileId             = $profileId;

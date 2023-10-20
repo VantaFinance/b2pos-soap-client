@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\B2posSoapClient\Client\Document\Struct;
 
-enum DocumentCheckStatus: int
+enum DocumentVerificationStatus: int
 {
     case SUCCESS = 1;
 
