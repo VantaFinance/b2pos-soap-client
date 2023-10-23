@@ -7,7 +7,7 @@ namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Serializer;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\StandartOffer;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\StandardOffer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Offer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Short\CreditCard;
 
@@ -50,7 +50,7 @@ final class OfferDenormalizer implements Denormalizer
         $dataKeys = array_keys($data);
         sort($dataKeys);
 
-        $type = StandartOffer::class;
+        $type = StandardOffer::class;
         if ($dataKeys == $shortOfferSortedFields) {
             $type = CreditCard::class;
         }
