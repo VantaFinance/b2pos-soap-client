@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full;
 
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Offer as OfferAbstract;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Offer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
-final class Offer extends OfferAbstract
+final class StandartOffer extends Offer
 {
     /**
-     * @var numeric-string
+     * @var positive-int
      */
+    #[Context([AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true])]
     #[SerializedPath('[ns1:terms]')]
-    public readonly string $periodToInMonths;
+    public readonly int $periodToInMonths;
 
     #[SerializedPath('[ns1:firstPayment]')]
     public readonly MoneyPositiveOrZero $initialPaymentAmount;
@@ -39,14 +42,14 @@ final class Offer extends OfferAbstract
 
     /**
      * @param non-empty-string    $loanProductName
-     * @param numeric-string      $periodToInMonths
+     * @param positive-int        $periodToInMonths
      * @param numeric-string|null $loanProductId
      */
     public function __construct(
         string $loanProductName,
         MoneyPositiveOrZero $paymentAmount,
         float $loanRate,
-        string $periodToInMonths,
+        int $periodToInMonths,
         MoneyPositiveOrZero $initialPaymentAmount = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $paymentAmountInMonth = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),

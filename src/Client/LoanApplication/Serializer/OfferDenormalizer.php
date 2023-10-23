@@ -7,7 +7,7 @@ namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Serializer;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\Offer as OfferFull;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\StandartOffer as OfferFull;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Offer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Short\CreditCard;
 
