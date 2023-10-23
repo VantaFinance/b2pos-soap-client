@@ -33,7 +33,7 @@ final class ResponseContentErrorMiddleware implements Middleware
         $request        = $request->withoutHeader(self::CHECK_ERROR_PATH);
 
         /** @var Response $response */
-        $response = $next($request);
+        $response = $next($request, $configuration);
 
         if ('' === $checkErrorPath) {
             throw CheckErrorPathMissingException::create($response, $request);
