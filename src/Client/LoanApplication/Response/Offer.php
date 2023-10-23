@@ -22,15 +22,24 @@ abstract class Offer
     public readonly float $loanRate;
 
     /**
-     * @param non-empty-string $loanProductName
+     * @var numeric-string|null
+     */
+    #[SerializedPath('[ns1:variantID]')]
+    public readonly ?string $loanProductId;
+
+    /**
+     * @param non-empty-string    $loanProductName
+     * @param numeric-string|null $loanProductId
      */
     public function __construct(
         string $loanProductName,
         MoneyPositiveOrZero $paymentAmount,
         float $loanRate,
+        ?string $loanProductId = null,
     ) {
         $this->loanProductName = $loanProductName;
         $this->paymentAmount   = $paymentAmount;
         $this->loanRate        = $loanRate;
+        $this->loanProductId   = $loanProductId;
     }
 }
