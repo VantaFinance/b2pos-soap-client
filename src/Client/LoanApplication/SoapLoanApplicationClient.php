@@ -46,9 +46,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
@@ -82,9 +80,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
@@ -118,15 +114,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            GetLoanApplicationStatusResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, GetLoanApplicationStatusResponse::class, 'xml');
     }
 }

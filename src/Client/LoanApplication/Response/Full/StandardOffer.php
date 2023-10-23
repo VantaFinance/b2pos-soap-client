@@ -35,8 +35,8 @@ final class StandardOffer extends Offer
     public readonly ?float $discount;
 
     /**
-     * @param non-empty-string $loanProductName
-     * @param positive-int     $periodToInMonths
+     * @param non-empty-string    $loanProductName
+     * @param positive-int        $periodToInMonths
      * @param numeric-string|null $loanProductId
      */
     public function __construct(

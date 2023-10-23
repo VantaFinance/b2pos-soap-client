@@ -48,9 +48,7 @@ final class SoapLoanProductClient implements LoanProductClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
         return $this->serializer->deserialize(
@@ -83,16 +81,10 @@ final class SoapLoanProductClient implements LoanProductClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            ChooseLoanProductResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, ChooseLoanProductResponse::class, 'xml');
     }
 
     public function cancelOffer(CancelOfferRequest $request): CancelOfferResponse
@@ -115,15 +107,9 @@ final class SoapLoanProductClient implements LoanProductClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            CancelOfferResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, CancelOfferResponse::class, 'xml');
     }
 }
