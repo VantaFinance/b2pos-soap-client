@@ -31,12 +31,6 @@ final class StandardOffer extends Offer
     #[SerializedPath('[ns1:otherAmount]')]
     public readonly MoneyPositiveOrZero $otherProductsAmount;
 
-    /**
-     * @var numeric-string|null
-     */
-    #[SerializedPath('[ns1:variantID]')]
-    public readonly ?string $loanProductId;
-
     #[SerializedPath('[ns1:rebate]')]
     public readonly ?float $discount;
 
@@ -54,17 +48,16 @@ final class StandardOffer extends Offer
         MoneyPositiveOrZero $paymentAmountInMonth = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $otherProductsAmount = new MoneyPositiveOrZero('0'),
-        ?string $loanProductId = null,
         ?float $discount = null,
+        ?string $loanProductId = null,
     ) {
-        parent::__construct($loanProductName, $paymentAmount, $loanRate);
+        parent::__construct($loanProductName, $paymentAmount, $loanRate, $loanProductId);
 
         $this->periodToInMonths     = $periodToInMonths;
         $this->initialPaymentAmount = $initialPaymentAmount;
         $this->paymentAmountInMonth = $paymentAmountInMonth;
         $this->insuranceAmount      = $insuranceAmount;
         $this->otherProductsAmount  = $otherProductsAmount;
-        $this->loanProductId        = $loanProductId;
         $this->discount             = $discount;
     }
 }

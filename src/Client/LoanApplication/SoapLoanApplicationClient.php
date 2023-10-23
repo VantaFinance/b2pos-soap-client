@@ -8,11 +8,9 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface as PsrHttpClient;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\CancelLoanApplicationRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Full\NewLoanApplicationRequest as NewLoanApplicationRequestFull;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\GetLoanApplicationStatusRequest;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Request\Short\NewLoanApplicationRequest as NewLoanApplicationRequestShort;
-use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full\CancelLoanApplicationResponse;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\GetLoanApplicationStatusResponse;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ResponseContentErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Serializer\RequestNormalizer;
@@ -48,9 +46,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
@@ -84,9 +80,7 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
         /* @phpstan-ignore-next-line */
@@ -120,47 +114,9 @@ final class SoapLoanApplicationClient implements LoanApplicationClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            GetLoanApplicationStatusResponse::class,
-            'xml',
-        );
-    }
-
-    public function cancelLoanApplicationFull(CancelLoanApplicationRequest $request): CancelLoanApplicationResponse
-    {
-        $requestContent = $this->serializer->serialize(
-            $request,
-            'xml',
-            [
-                RequestNormalizer::AUTHORIZATION_DATA_PATH => '[soapenv:Body][api:CancelOptyRequest]',
-                XmlEncoder::FIELD_NAME_PREFIX              => 'api:',
-            ],
-        );
-
-        $requestPsr = new Request(
-            Method::POST,
-            '/loan/',
-            [
-                ResponseContentErrorMiddleware::CHECK_ERROR_PATH => '[soapenv:Body][ns1:CancelOptyResponse]',
-            ],
-            $requestContent,
-        );
-
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
-        $responseContent = $responsePsr->getBody()->__toString();
-
-        return $this->serializer->deserialize(
-            $responseContent,
-            CancelLoanApplicationResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, GetLoanApplicationStatusResponse::class, 'xml');
     }
 }

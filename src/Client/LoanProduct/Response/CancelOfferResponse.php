@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Full;
+namespace Vanta\Integration\B2posSoapClient\Client\LoanProduct\Response;
 
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
-final class CancelLoanApplicationResponse
+final class CancelOfferResponse
 {
     /**
      * @var numeric-string

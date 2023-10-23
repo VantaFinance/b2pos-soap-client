@@ -43,15 +43,9 @@ final class SoapDocumentClient implements DocumentClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            GetDocumentsCheckResultResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, GetDocumentsCheckResultResponse::class, 'xml');
     }
 }

@@ -43,15 +43,9 @@ final class SoapLoanAgreementClient implements LoanAgreementClient
             $requestContent,
         );
 
-        $responsePsr = $this->client->sendRequest(
-            $requestPsr,
-        );
+        $responsePsr     = $this->client->sendRequest($requestPsr);
         $responseContent = $responsePsr->getBody()->__toString();
 
-        return $this->serializer->deserialize(
-            $responseContent,
-            AuthorizeLoanAgreementResponse::class,
-            'xml',
-        );
+        return $this->serializer->deserialize($responseContent, AuthorizeLoanAgreementResponse::class, 'xml');
     }
 }
