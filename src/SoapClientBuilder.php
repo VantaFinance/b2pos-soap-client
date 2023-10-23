@@ -25,7 +25,6 @@ use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Serializer\OfferDen
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\AuthorizationMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\ClientErrorMiddleware;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
@@ -64,20 +63,14 @@ final class SoapClientBuilder
     private readonly string $userToken;
 
     /**
-     * @var non-empty-array<int, Middleware>
+     * @var non-empty-array<class-string, Middleware>
      */
     private readonly array $middlewares;
 
     /**
-     * @var non-empty-string
-     */
-    private readonly string $url;
-
-    /**
-     * @param non-empty-string                 $userId
-     * @param non-empty-string                 $userToken
-     * @param non-empty-string                 $url
-     * @param non-empty-array<int, Middleware> $middlewares
+     * @param non-empty-string                          $userId
+     * @param non-empty-string                          $userToken
+     * @param non-empty-array<class-string, Middleware> $middlewares
      */
     private function __construct(
         XmlSerializer $serializer,
@@ -85,22 +78,25 @@ final class SoapClientBuilder
         string $userId,
         string $userToken,
         array $middlewares,
-        string $url = 'https://api.b2pos.ru',
     ) {
         $this->serializer  = $serializer;
         $this->client      = $client;
         $this->userId      = $userId;
         $this->userToken   = $userToken;
         $this->middlewares = $middlewares;
-        $this->url         = $url;
     }
 
     /**
      * @param numeric-string   $userId
      * @param non-empty-string $userToken
+     * @param non-empty-string $url
      */
-    public static function create(PsrHttpClient $client, string $userId, string $userToken): self
-    {
+    public static function create(
+        PsrHttpClient $client,
+        string $userId,
+        string $userToken,
+        string $url = 'https://api.b2pos.ru',
+    ): self {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
 
         $phpDocExtractor = new PhpDocExtractor();
@@ -168,11 +164,11 @@ final class SoapClientBuilder
             $userId,
             $userToken,
             [
-                new UrlMiddleware(),
-                new AuthorizationMiddleware($userId, $userToken),
-                new ResponseContentErrorMiddleware($xmlEncoder, $propertyAccessor),
-                new ClientErrorMiddleware(),
-                new InternalServerMiddleware(),
+                UrlMiddleware::class                  => new UrlMiddleware($url),
+                AuthorizationMiddleware::class        => new AuthorizationMiddleware($userId, $userToken),
+                ResponseContentErrorMiddleware::class => new ResponseContentErrorMiddleware($xmlEncoder, $propertyAccessor),
+                ClientErrorMiddleware::class          => new ClientErrorMiddleware(),
+                InternalServerMiddleware::class       => new InternalServerMiddleware(),
             ],
         );
     }
@@ -185,7 +181,6 @@ final class SoapClientBuilder
             $this->userId,
             $this->userToken,
             $this->middlewares,
-            $this->url,
         );
     }
 
@@ -197,7 +192,6 @@ final class SoapClientBuilder
             $this->userId,
             $this->userToken,
             $this->middlewares,
-            $this->url,
         );
     }
 
@@ -213,12 +207,11 @@ final class SoapClientBuilder
             $userId,
             $userToken,
             $this->middlewares,
-            $this->url,
         );
     }
 
     /**
-     * @param non-empty-array<int, Middleware> $middlewares
+     * @param non-empty-array<class-string, Middleware> $middlewares
      */
     public function withMiddlewares(array $middlewares): self
     {
@@ -228,7 +221,6 @@ final class SoapClientBuilder
             $this->userId,
             $this->userToken,
             $middlewares,
-            $this->url,
         );
     }
 
@@ -239,8 +231,7 @@ final class SoapClientBuilder
             $this->client,
             $this->userId,
             $this->userToken,
-            array_merge($this->middlewares, [$middleware]),
-            $this->url,
+            array_merge($this->middlewares, [$middleware::class => $middleware]),
         );
     }
 
@@ -249,13 +240,15 @@ final class SoapClientBuilder
      */
     public function withUrl(string $url): self
     {
+        $middlewares                       = $this->middlewares;
+        $middlewares[UrlMiddleware::class] = new UrlMiddleware($url);
+
         return new self(
             $this->serializer,
             $this->client,
             $this->userId,
             $this->userToken,
-            $this->middlewares,
-            $url,
+            $middlewares,
         );
     }
 
@@ -264,7 +257,6 @@ final class SoapClientBuilder
         return new SoapDocumentClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
         );
     }
 
@@ -273,7 +265,6 @@ final class SoapClientBuilder
         return new SoapLoanAgreementClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
         );
     }
 
@@ -282,7 +273,6 @@ final class SoapClientBuilder
         return new SoapLoanApplicationClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
         );
     }
 
@@ -291,7 +281,6 @@ final class SoapClientBuilder
         return new SoapLoanProductClient(
             $this->serializer,
             new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
         );
     }
 }

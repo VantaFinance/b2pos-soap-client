@@ -9,12 +9,13 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface as PropertyAccessor;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface as Decoder;
-use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\CheckErrorPathMissingException;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\ResponseContentErrorException;
 
 final class ResponseContentErrorMiddleware implements Middleware
 {
+    public const CHECK_ERROR_PATH = 'b2pos_soap_client_check_error_path';
+
     private readonly Decoder $decoder;
 
     private readonly PropertyAccessor $propertyAccessor;
@@ -25,12 +26,16 @@ final class ResponseContentErrorMiddleware implements Middleware
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
+    public function process(Request $request, callable $next): Response
     {
-        /** @var Response $response */
-        $response = $next($request, $clientConfiguration);
+        /** @var non-empty-string|null $checkErrorPath */
+        $checkErrorPath = $request->getHeader(self::CHECK_ERROR_PATH)[0] ?? null;
+        $request        = $request->withoutHeader(self::CHECK_ERROR_PATH);
 
-        if (null === $clientConfiguration->checkErrorPath) {
+        /** @var Response $response */
+        $response = $next($request);
+
+        if (null === $checkErrorPath) {
             throw CheckErrorPathMissingException::create($response, $request);
         }
 
@@ -45,8 +50,8 @@ final class ResponseContentErrorMiddleware implements Middleware
         $responseDataDecoded = $this->decoder->decode($responseData, 'xml');
 
         // ошибка может быть только одна, не массив
-        $errorCode        = $this->getErrorCode($responseDataDecoded, $clientConfiguration->checkErrorPath);
-        $errorDescription = $this->getErrorDescription($responseDataDecoded, $clientConfiguration->checkErrorPath);
+        $errorCode        = $this->getErrorCode($responseDataDecoded, $checkErrorPath);
+        $errorDescription = $this->getErrorDescription($responseDataDecoded, $checkErrorPath);
 
         if (null === $errorCode && null === $errorDescription) {
             return $response;

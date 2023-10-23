@@ -9,17 +9,17 @@ use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
 
-final class B2PosClient
+final class B2PosClient implements PsrHttpClient
 {
     /**
-     * @var array<int, Middleware>
+     * @var array<class-string, Middleware>
      */
     private readonly array $middlewares;
 
     private readonly PsrHttpClient $client;
 
     /**
-     * @param array<int, Middleware> $middlewares
+     * @param array<class-string, Middleware> $middlewares
      */
     public function __construct(array $middlewares, PsrHttpClient $client)
     {
@@ -27,7 +27,7 @@ final class B2PosClient
         $this->client      = $client;
     }
 
-    public function sendRequest(Request $request, B2PosClientConfiguration $clientConfiguration): Response
+    public function sendRequest(Request $request): Response
     {
         $middlewares = $this->middlewares;
         $middleware  = array_shift($middlewares);
@@ -36,6 +36,6 @@ final class B2PosClient
             return $this->client->sendRequest($request);
         }
 
-        return $middleware->process($request, $clientConfiguration, [new self($middlewares, $this->client), 'sendRequest']);
+        return $middleware->process($request, [new self($middlewares, $this->client), 'sendRequest']);
     }
 }
