@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface as PropertyAccessor;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface as Decoder;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\CheckErrorPathMissingException;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\ResponseContentErrorException;
 
@@ -26,16 +27,15 @@ final class ResponseContentErrorMiddleware implements Middleware
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    public function process(Request $request, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
-        /** @var non-empty-string|null $checkErrorPath */
-        $checkErrorPath = $request->getHeader(self::CHECK_ERROR_PATH)[0] ?? null;
+        $checkErrorPath = $request->getHeaderLine(self::CHECK_ERROR_PATH);
         $request        = $request->withoutHeader(self::CHECK_ERROR_PATH);
 
         /** @var Response $response */
         $response = $next($request);
 
-        if (null === $checkErrorPath) {
+        if ('' === $checkErrorPath) {
             throw CheckErrorPathMissingException::create($response, $request);
         }
 

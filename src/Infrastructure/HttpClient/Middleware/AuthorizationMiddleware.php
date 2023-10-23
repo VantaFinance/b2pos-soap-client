@@ -7,6 +7,7 @@ namespace Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfiguration;
 
 final class AuthorizationMiddleware implements Middleware
 {
@@ -30,7 +31,7 @@ final class AuthorizationMiddleware implements Middleware
         $this->userToken = $userToken;
     }
 
-    public function process(Request $request, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
         $requestContents = $request->getBody()->__toString();
 
