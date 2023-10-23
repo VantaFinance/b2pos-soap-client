@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Response\Offer;
 use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\MoneyPositiveOrZero;
 
-final class StandartOffer extends Offer
+final class StandardOffer extends Offer
 {
     /**
      * @var positive-int
