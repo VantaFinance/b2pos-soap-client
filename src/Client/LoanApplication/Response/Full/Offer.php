@@ -22,17 +22,17 @@ final class Offer extends OfferAbstract
     #[SerializedPath('[ns1:monthlyAmount]')]
     public readonly MoneyPositiveOrZero $paymentAmountInMonth;
 
+    #[SerializedPath('[ns1:insuranceAmount]')]
+    public readonly MoneyPositiveOrZero $insuranceAmount;
+
+    #[SerializedPath('[ns1:otherAmount]')]
+    public readonly MoneyPositiveOrZero $otherProductsAmount;
+
     /**
      * @var numeric-string|null
      */
     #[SerializedPath('[ns1:variantID]')]
     public readonly ?string $loanProductId;
-
-    #[SerializedPath('[ns1:insuranceAmount]')]
-    public readonly ?MoneyPositiveOrZero $insuranceAmount;
-
-    #[SerializedPath('[ns1:otherAmount]')]
-    public readonly ?MoneyPositiveOrZero $otherProductsAmount;
 
     #[SerializedPath('[ns1:rebate]')]
     public readonly ?float $discount;
@@ -49,9 +49,9 @@ final class Offer extends OfferAbstract
         string $periodToInMonths,
         MoneyPositiveOrZero $initialPaymentAmount = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $paymentAmountInMonth = new MoneyPositiveOrZero('0'),
+        MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),
+        MoneyPositiveOrZero $otherProductsAmount = new MoneyPositiveOrZero('0'),
         ?string $loanProductId = null,
-        ?MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),
-        ?MoneyPositiveOrZero $otherProductsAmount = new MoneyPositiveOrZero('0'),
         ?float $discount = null,
     ) {
         parent::__construct($loanProductName, $paymentAmount, $loanRate);
@@ -59,9 +59,9 @@ final class Offer extends OfferAbstract
         $this->periodToInMonths     = $periodToInMonths;
         $this->initialPaymentAmount = $initialPaymentAmount;
         $this->paymentAmountInMonth = $paymentAmountInMonth;
-        $this->loanProductId        = $loanProductId;
         $this->insuranceAmount      = $insuranceAmount;
         $this->otherProductsAmount  = $otherProductsAmount;
+        $this->loanProductId        = $loanProductId;
         $this->discount             = $discount;
     }
 }
