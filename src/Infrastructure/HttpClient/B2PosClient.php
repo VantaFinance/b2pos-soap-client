@@ -9,7 +9,7 @@ use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Middleware\Middleware;
 
-final class B2PosClient
+final class B2PosClient implements PsrHttpClient
 {
     /**
      * @var array<int, Middleware>
@@ -18,16 +18,22 @@ final class B2PosClient
 
     private readonly PsrHttpClient $client;
 
+    private readonly B2PosClientConfiguration $configuration;
+
     /**
      * @param array<int, Middleware> $middlewares
      */
-    public function __construct(array $middlewares, PsrHttpClient $client)
-    {
-        $this->middlewares = $middlewares;
-        $this->client      = $client;
+    public function __construct(
+        array $middlewares,
+        PsrHttpClient $client,
+        B2PosClientConfiguration $configuration,
+    ) {
+        $this->middlewares   = $middlewares;
+        $this->client        = $client;
+        $this->configuration = $configuration;
     }
 
-    public function sendRequest(Request $request, B2PosClientConfiguration $clientConfiguration): Response
+    public function sendRequest(Request $request): Response
     {
         $middlewares = $this->middlewares;
         $middleware  = array_shift($middlewares);
@@ -36,6 +42,13 @@ final class B2PosClient
             return $this->client->sendRequest($request);
         }
 
-        return $middleware->process($request, $clientConfiguration, [new self($middlewares, $this->client), 'sendRequest']);
+        return $middleware->process(
+            $request,
+            $this->configuration,
+            [
+                new self($middlewares, $this->client, $this->configuration),
+                'sendRequest',
+            ],
+        );
     }
 }

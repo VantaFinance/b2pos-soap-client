@@ -19,7 +19,9 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerSymfony;
+use Vanta\Integration\B2posSoapClient\Client\Document\SoapDocumentClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanAgreement\SoapLoanAgreementClient;
+use Vanta\Integration\B2posSoapClient\Client\LoanApplication\Serializer\OfferDenormalizer;
 use Vanta\Integration\B2posSoapClient\Client\LoanApplication\SoapLoanApplicationClient;
 use Vanta\Integration\B2posSoapClient\Client\LoanProduct\SoapLoanProductClient;
 use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClient;
@@ -74,8 +76,8 @@ final class SoapClientBuilder
     /**
      * @param non-empty-string                 $userId
      * @param non-empty-string                 $userToken
-     * @param non-empty-string                 $url
      * @param non-empty-array<int, Middleware> $middlewares
+     * @param non-empty-string                 $url
      */
     private function __construct(
         XmlSerializer $serializer,
@@ -83,7 +85,7 @@ final class SoapClientBuilder
         string $userId,
         string $userToken,
         array $middlewares,
-        string $url = 'https://api.b2pos.ru',
+        string $url,
     ) {
         $this->serializer  = $serializer;
         $this->client      = $client;
@@ -96,9 +98,14 @@ final class SoapClientBuilder
     /**
      * @param numeric-string   $userId
      * @param non-empty-string $userToken
+     * @param non-empty-string $url
      */
-    public static function create(PsrHttpClient $client, string $userId, string $userToken): self
-    {
+    public static function create(
+        PsrHttpClient $client,
+        string $userId,
+        string $userToken,
+        string $url = 'https://api.b2pos.ru',
+    ): self {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
 
         $phpDocExtractor = new PhpDocExtractor();
@@ -111,35 +118,48 @@ final class SoapClientBuilder
             propertyTypeExtractor: $typeExtractor,
         );
 
+        $moneyPositiveOrZeroNormalizer = new MoneyPositiveOrZeroNormalizer();
+
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $xmlEncoder       = new XmlEncoder(new XmlEncoderSymfony());
 
-        $serializerSymfony = new SerializerSymfony(
-            [
-                new PhoneNumberNormalizer(),
-                new MoneyPositiveOrZeroNormalizer(),
-                new RussianPassportDocumentNormalizer(),
-                new CountryIsoNormalizer(),
-                new DivisionCodeNormalizer(),
-                new RussianPassportNumberNormalizer(),
-                new RussianPassportSeriesNormalizer(),
-                new EmailNormalizer(),
-                new Base64Normalizer(),
-                new BackedEnumNormalizer(),
-                new DateTimeNormalizer(),
-                new UnwrappingDenormalizer(),
-                new NumericStringDenormalizer(),
-                new ArrayDenormalizer(),
-                new RequestNormalizer(
-                    $objectNormalizer,
-                    $propertyAccessor,
-                ),
-                new ObjectDenormalizer(
-                    $objectNormalizer,
-                    $propertyAccessor,
-                ),
+        $normalizers = [
+            new PhoneNumberNormalizer(),
+            $moneyPositiveOrZeroNormalizer,
+            new RussianPassportDocumentNormalizer(),
+            new CountryIsoNormalizer(),
+            new DivisionCodeNormalizer(),
+            new RussianPassportNumberNormalizer(),
+            new RussianPassportSeriesNormalizer(),
+            new EmailNormalizer(),
+            new Base64Normalizer(),
+            new BackedEnumNormalizer(),
+            new DateTimeNormalizer(),
+            new UnwrappingDenormalizer(),
+            new NumericStringDenormalizer(),
+            new ArrayDenormalizer(),
+            new RequestNormalizer(
                 $objectNormalizer,
+                $propertyAccessor,
+            ),
+            new ObjectDenormalizer(
+                $objectNormalizer,
+                $propertyAccessor,
+            ),
+            $objectNormalizer,
+        ];
+
+        $serializerSymfony = new SerializerSymfony(
+            $normalizers,
+            [
+                $xmlEncoder,
             ],
+        );
+
+        $offerDenormalizer = new OfferDenormalizer($serializerSymfony);
+
+        $serializerSymfony = new SerializerSymfony(
+            array_merge([$offerDenormalizer], $normalizers),
             [
                 $xmlEncoder,
             ],
@@ -159,6 +179,7 @@ final class SoapClientBuilder
                 new ClientErrorMiddleware(),
                 new InternalServerMiddleware(),
             ],
+            $url,
         );
     }
 
@@ -244,21 +265,15 @@ final class SoapClientBuilder
         );
     }
 
-    public function createLoanProductClient(): LoanProductClient
+    public function createDocumentClient(): DocumentClient
     {
-        return new SoapLoanProductClient(
+        return new SoapDocumentClient(
             $this->serializer,
-            new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
-        );
-    }
-
-    public function createLoanApplicationClient(): LoanApplicationClient
-    {
-        return new SoapLoanApplicationClient(
-            $this->serializer,
-            new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
+            new B2PosClient(
+                $this->middlewares,
+                $this->client,
+                new B2PosClientConfiguration($this->url),
+            ),
         );
     }
 
@@ -266,8 +281,35 @@ final class SoapClientBuilder
     {
         return new SoapLoanAgreementClient(
             $this->serializer,
-            new B2PosClient($this->middlewares, $this->client),
-            new B2PosClientConfiguration($this->url),
+            new B2PosClient(
+                $this->middlewares,
+                $this->client,
+                new B2PosClientConfiguration($this->url),
+            ),
+        );
+    }
+
+    public function createLoanApplicationClient(): LoanApplicationClient
+    {
+        return new SoapLoanApplicationClient(
+            $this->serializer,
+            new B2PosClient(
+                $this->middlewares,
+                $this->client,
+                new B2PosClientConfiguration($this->url),
+            ),
+        );
+    }
+
+    public function createLoanProductClient(): LoanProductClient
+    {
+        return new SoapLoanProductClient(
+            $this->serializer,
+            new B2PosClient(
+                $this->middlewares,
+                $this->client,
+                new B2PosClientConfiguration($this->url),
+            ),
         );
     }
 }

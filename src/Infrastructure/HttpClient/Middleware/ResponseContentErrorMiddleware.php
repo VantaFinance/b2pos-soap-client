@@ -15,6 +15,8 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\Exception\Respon
 
 final class ResponseContentErrorMiddleware implements Middleware
 {
+    public const CHECK_ERROR_PATH = 'b2pos_soap_client_check_error_path';
+
     private readonly Decoder $decoder;
 
     private readonly PropertyAccessor $propertyAccessor;
@@ -25,12 +27,15 @@ final class ResponseContentErrorMiddleware implements Middleware
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
-        /** @var Response $response */
-        $response = $next($request, $clientConfiguration);
+        $checkErrorPath = $request->getHeaderLine(self::CHECK_ERROR_PATH);
+        $request        = $request->withoutHeader(self::CHECK_ERROR_PATH);
 
-        if (null === $clientConfiguration->checkErrorPath) {
+        /** @var Response $response */
+        $response = $next($request);
+
+        if ('' === $checkErrorPath) {
             throw CheckErrorPathMissingException::create($response, $request);
         }
 
@@ -45,8 +50,8 @@ final class ResponseContentErrorMiddleware implements Middleware
         $responseDataDecoded = $this->decoder->decode($responseData, 'xml');
 
         // ошибка может быть только одна, не массив
-        $errorCode        = $this->getErrorCode($responseDataDecoded, $clientConfiguration->checkErrorPath);
-        $errorDescription = $this->getErrorDescription($responseDataDecoded, $clientConfiguration->checkErrorPath);
+        $errorCode        = $this->getErrorCode($responseDataDecoded, $checkErrorPath);
+        $errorDescription = $this->getErrorDescription($responseDataDecoded, $checkErrorPath);
 
         if (null === $errorCode && null === $errorDescription) {
             return $response;

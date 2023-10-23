@@ -28,11 +28,11 @@ final class SelectedBank
     #[SerializedPath('[api:duration]')]
     public readonly ?int $loanPeriodInMonths;
 
-    #[SerializedPath('[api:firstPayment]')]
-    public readonly ?MoneyPositiveOrZero $firstPaymentAmount;
-
     #[SerializedPath('[api:type]')]
     public readonly ?LoanType $loanType;
+
+    #[SerializedPath('[api:firstPayment]')]
+    public readonly MoneyPositiveOrZero $firstPaymentAmount;
 
     /**
      * @param numeric-string      $id
@@ -43,13 +43,13 @@ final class SelectedBank
         string $id,
         ?string $productId = null,
         ?int $loanPeriodInMonths = null,
-        ?MoneyPositiveOrZero $firstPaymentAmount = null,
         ?LoanType $loanType = null,
+        MoneyPositiveOrZero $firstPaymentAmount = new MoneyPositiveOrZero('0'),
     ) {
         $this->id                 = $id;
         $this->productId          = $productId;
         $this->loanPeriodInMonths = $loanPeriodInMonths;
-        $this->firstPaymentAmount = $firstPaymentAmount;
         $this->loanType           = $loanType;
+        $this->firstPaymentAmount = $firstPaymentAmount;
     }
 }

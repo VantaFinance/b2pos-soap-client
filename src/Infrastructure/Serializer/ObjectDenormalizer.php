@@ -11,6 +11,8 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
 
+use function Vanta\Integration\arrayRemoveValueByDynamicKey;
+
 final class ObjectDenormalizer implements Denormalizer
 {
     private readonly Denormalizer $objectNormalizer;
@@ -34,9 +36,9 @@ final class ObjectDenormalizer implements Denormalizer
     }
 
     /**
-     * @param array<string, mixed>  $data
-     * @param class-string          $type
-     * @param array<string, string> $context
+     * @param array<int|string, mixed> $data
+     * @param class-string             $type
+     * @param array<string, string>    $context
      */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
@@ -54,8 +56,9 @@ final class ObjectDenormalizer implements Denormalizer
      * Проявляется, как минимум, в Vanta\Integration\B2posSoapClient\Client\Reference\Response\SelectedBank::loanProducts,
      * вместо ['ns1:creditProducts']['ns1:creditProduct'] => [], получаем ['ns1:creditProducts'] => ''.
      *
-     * @param array<string, mixed> $data
-     * @param class-string         $type
+     * @param  array<int|string, mixed> $data
+     * @param  class-string             $type
+     * @return array<int|string, mixed> $data
      */
     private function normalizeEmptyArray(mixed $data, string $type): mixed
     {
@@ -87,8 +90,15 @@ final class ObjectDenormalizer implements Denormalizer
                 continue;
             }
 
+            // отсеиваем поля без родительского элемента, например, при невалидной структуре ответа
+            $keyItemList = $serializedPathAttribute->getSerializedPath()->getParent()?->getElements() ?? [];
+
+            if (0 == count($keyItemList)) {
+                continue;
+            }
+
             // удаляем некорректные поля
-            unset($data[$serializedPathAttribute->getSerializedPath()->getElement(0)]);
+            $data = arrayRemoveValueByDynamicKey($data, $keyItemList);
         }
 
         return $data;

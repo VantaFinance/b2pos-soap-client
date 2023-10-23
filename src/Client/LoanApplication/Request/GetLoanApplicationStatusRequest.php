@@ -12,13 +12,13 @@ final class GetLoanApplicationStatusRequest
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:StatusOptyRequest][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     /**
-     * @param numeric-string $loanApplicationId
+     * @param numeric-string $profileId
      */
-    public function __construct(string $loanApplicationId)
+    public function __construct(string $profileId)
     {
-        $this->loanApplicationId = $loanApplicationId;
+        $this->profileId = $profileId;
     }
 }

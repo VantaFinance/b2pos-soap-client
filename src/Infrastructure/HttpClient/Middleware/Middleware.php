@@ -12,9 +12,9 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\HttpClient\B2PosClientConfi
 interface Middleware
 {
     /**
-     * @param callable(Request, B2PosClientConfiguration): Response $next
+     * @param callable(Request): Response $next
      *
      * @throws ClientException
      */
-    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response;
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response;
 }

@@ -15,9 +15,9 @@ use Yiisoft\Http\Status;
 
 final class ClientErrorMiddleware implements Middleware
 {
-    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
-        $response   = $next($request, $clientConfiguration);
+        $response   = $next($request);
         $statusCode = $response->getStatusCode();
 
         if (Status::UNAUTHORIZED == $statusCode) {

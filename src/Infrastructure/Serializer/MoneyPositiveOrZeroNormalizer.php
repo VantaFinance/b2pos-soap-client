@@ -37,10 +37,15 @@ final class MoneyPositiveOrZeroNormalizer implements Normalizer, Denormalizer
     }
 
     /**
-     * @param array<string, string> $context
+     * @param array<string, string>|string $data
+     * @param array<string, string>        $context
      */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): MoneyPositiveOrZero
     {
+        if ($data['@xsi:nil'] ?? false) {
+            $data = '';
+        }
+
         if (!is_string($data)) {
             throw NotNormalizableValueException::createForUnexpectedDataType(
                 sprintf('Ожидали строку,получили:%s.', get_debug_type($data)),

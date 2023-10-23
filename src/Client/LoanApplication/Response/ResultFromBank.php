@@ -10,6 +10,24 @@ use Vanta\Integration\B2posSoapClient\Infrastructure\Struct\SignType;
 
 final class ResultFromBank
 {
+    /**
+     * @var numeric-string
+     */
+    #[SerializedPath('[ns1:bank]')]
+    public readonly string $bankId;
+
+    /**
+     * @var non-empty-string
+     */
+    #[SerializedPath('[ns1:bankName]')]
+    public readonly string $bankName;
+
+    /**
+     * @var non-empty-string
+     */
+    #[SerializedPath('[ns1:bankCode]')]
+    public readonly string $bankCode;
+
     #[SerializedPath('[ns1:signType]')]
     public readonly SignType $signTypeAvailableForLoanApplicationAndBank;
 
@@ -18,24 +36,6 @@ final class ResultFromBank
 
     #[SerializedPath('[ns1:signedTypeStatus]')]
     public readonly bool $isSesSigned; // Simple Electronic Signature
-
-    /**
-     * @var numeric-string|null
-     */
-    #[SerializedPath('[ns1:bank]')]
-    public readonly ?string $bankId;
-
-    /**
-     * @var non-empty-string|null
-     */
-    #[SerializedPath('[ns1:bankName]')]
-    public readonly ?string $bankName;
-
-    /**
-     * @var non-empty-string|null
-     */
-    #[SerializedPath('[ns1:bankCode]')]
-    public readonly ?string $bankCode;
 
     #[SerializedPath('[ns1:decision]')]
     public readonly ?BankDecision $decision;
@@ -104,9 +104,9 @@ final class ResultFromBank
     public readonly array $insurances;
 
     /**
-     * @param numeric-string|null   $bankId
-     * @param non-empty-string|null $bankName
-     * @param non-empty-string|null $bankCode
+     * @param numeric-string        $bankId
+     * @param non-empty-string      $bankName
+     * @param non-empty-string      $bankCode
      * @param non-empty-string|null $errorText
      * @param numeric-string|null   $chosenBankProductId
      * @param non-empty-string|null $loanAgreementNumber
@@ -116,12 +116,12 @@ final class ResultFromBank
      * @param array<int, Insurance> $insurances
      */
     public function __construct(
+        string $bankId,
+        string $bankName,
+        string $bankCode,
         SignType $signTypeAvailableForLoanApplicationAndBank,
         SignType $signType,
         bool $isSesSigned,
-        ?string $bankId = null,
-        ?string $bankName = null,
-        ?string $bankCode = null,
         ?BankDecision $decision = null,
         ?string $errorText = null,
         ?string $chosenBankProductId = null,
@@ -138,12 +138,12 @@ final class ResultFromBank
         ?bool $isOldClientSes = null,
         array $insurances = [],
     ) {
-        $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
-        $this->signType                                   = $signType;
-        $this->isSesSigned                                = $isSesSigned;
         $this->bankId                                     = $bankId;
         $this->bankName                                   = $bankName;
         $this->bankCode                                   = $bankCode;
+        $this->signTypeAvailableForLoanApplicationAndBank = $signTypeAvailableForLoanApplicationAndBank;
+        $this->signType                                   = $signType;
+        $this->isSesSigned                                = $isSesSigned;
         $this->decision                                   = $decision;
         $this->errorText                                  = $errorText;
         $this->chosenBankProductId                        = $chosenBankProductId;

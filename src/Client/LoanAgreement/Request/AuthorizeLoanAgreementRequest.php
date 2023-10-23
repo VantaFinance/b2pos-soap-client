@@ -12,13 +12,13 @@ final class AuthorizeLoanAgreementRequest
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AuthOptyRequest][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     /**
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AuthOptyRequest][api:acceptBank]')]
-    public readonly string $chooseBankId;
+    public readonly string $bankId;
 
     /**
      * @var array<int, Document>
@@ -27,17 +27,17 @@ final class AuthorizeLoanAgreementRequest
     public readonly array $documents;
 
     /**
-     * @param numeric-string       $loanApplicationId
-     * @param numeric-string       $chooseBankId
+     * @param numeric-string       $profileId
+     * @param numeric-string       $bankId
      * @param array<int, Document> $documents
      */
     public function __construct(
-        string $loanApplicationId,
-        string $chooseBankId,
+        string $profileId,
+        string $bankId,
         array $documents = [],
     ) {
-        $this->loanApplicationId = $loanApplicationId;
-        $this->chooseBankId      = $chooseBankId;
-        $this->documents         = $documents;
+        $this->profileId = $profileId;
+        $this->bankId    = $bankId;
+        $this->documents = $documents;
     }
 }

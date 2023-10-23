@@ -13,13 +13,13 @@ final class ChooseLoanProductRequest
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyRequest][api:profileID]')]
-    public readonly string $loanApplicationId;
+    public readonly string $profileId;
 
     /**
      * @var numeric-string
      */
     #[SerializedPath('[soapenv:Body][api:AcceptOptyRequest][api:acceptBank]')]
-    public readonly string $chooseBankId;
+    public readonly string $bankId;
 
     #[SerializedPath('[soapenv:Body][api:AcceptOptyRequest][api:signType]')]
     public readonly SignType $signType;
@@ -31,18 +31,18 @@ final class ChooseLoanProductRequest
     public readonly ?string $chooseLoanProduct;
 
     /**
-     * @param numeric-string        $loanApplicationId
-     * @param numeric-string        $chooseBankId
+     * @param numeric-string        $profileId
+     * @param numeric-string        $bankId
      * @param non-empty-string|null $chooseLoanProduct
      */
     public function __construct(
-        string $loanApplicationId,
-        string $chooseBankId,
+        string $profileId,
+        string $bankId,
         SignType $signType,
         ?string $chooseLoanProduct = null,
     ) {
-        $this->loanApplicationId = $loanApplicationId;
-        $this->chooseBankId      = $chooseBankId;
+        $this->profileId         = $profileId;
+        $this->bankId            = $bankId;
         $this->signType          = $signType;
         $this->chooseLoanProduct = $chooseLoanProduct;
     }

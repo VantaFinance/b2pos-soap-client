@@ -31,7 +31,7 @@ final class AuthorizationMiddleware implements Middleware
         $this->userToken = $userToken;
     }
 
-    public function process(Request $request, B2PosClientConfiguration $clientConfiguration, callable $next): Response
+    public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
         $requestContents = $request->getBody()->__toString();
 
@@ -53,6 +53,6 @@ final class AuthorizationMiddleware implements Middleware
 
         $request = $request->withHeader('Content-Type', 'application/soap+xml');
 
-        return $next($request, $clientConfiguration);
+        return $next($request);
     }
 }
