@@ -37,6 +37,7 @@ final class StandardOffer extends Offer
     /**
      * @param non-empty-string $loanProductName
      * @param positive-int     $periodToInMonths
+     * @param numeric-string|null $loanProductId
      */
     public function __construct(
         string $loanProductName,
@@ -48,8 +49,9 @@ final class StandardOffer extends Offer
         MoneyPositiveOrZero $insuranceAmount = new MoneyPositiveOrZero('0'),
         MoneyPositiveOrZero $otherProductsAmount = new MoneyPositiveOrZero('0'),
         ?float $discount = null,
+        ?string $loanProductId = null,
     ) {
-        parent::__construct($loanProductName, $paymentAmount, $loanRate);
+        parent::__construct($loanProductName, $paymentAmount, $loanRate, $loanProductId);
 
         $this->periodToInMonths     = $periodToInMonths;
         $this->initialPaymentAmount = $initialPaymentAmount;
