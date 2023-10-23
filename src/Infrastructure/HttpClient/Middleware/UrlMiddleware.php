@@ -17,6 +17,6 @@ final class UrlMiddleware implements Middleware
             Utils::uriFor(sprintf('%s%s', $configuration->url, $request->getUri()->__toString())),
         );
 
-        return $next($request);
+        return $next($request, $configuration);
     }
 }

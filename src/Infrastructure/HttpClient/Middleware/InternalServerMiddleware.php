@@ -14,7 +14,7 @@ final class InternalServerMiddleware implements Middleware
 {
     public function process(Request $request, B2PosClientConfiguration $configuration, callable $next): Response
     {
-        $response   = $next($request);
+        $response   = $next($request, $configuration);
         $statusCode = $response->getStatusCode();
 
         if (!(Status::INTERNAL_SERVER_ERROR <= $statusCode && $statusCode <= Status::NETWORK_AUTHENTICATION_REQUIRED)) {

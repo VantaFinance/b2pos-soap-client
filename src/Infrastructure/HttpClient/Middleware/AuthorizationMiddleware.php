@@ -53,6 +53,6 @@ final class AuthorizationMiddleware implements Middleware
 
         $request = $request->withHeader('Content-Type', 'application/soap+xml');
 
-        return $next($request);
+        return $next($request, $configuration);
     }
 }
