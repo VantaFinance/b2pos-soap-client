@@ -1,6 +1,6 @@
 # B2PosSoapClient
 
-Клиент для интеграции с сервисом https://pos-credit.ru/
+Клиент для интеграции с сервисом [api.b2pos.ru](https://api.b2pos.ru/loan/manual/full/)
 
 ## Установка
 
